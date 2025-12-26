@@ -1,5 +1,3 @@
-// lib/screens/user/deposit_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/customer_user.dart';
@@ -19,6 +17,10 @@ class _DepositPageState extends State<DepositPage> {
   final _amountController = TextEditingController();
   final _transferService = TransferService();
   bool _isLoading = false;
+
+  // Definisi Konstanta Warna Tema
+  final Color primaryTeal = const Color(0xFF1A9591);
+  final Color secondaryTeal = const Color(0xFF67C3C0);
 
   /// FUNGSI PROSES DEPOSIT
   void _handleDeposit() async {
@@ -62,13 +64,14 @@ class _DepositPageState extends State<DepositPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(response.message ?? "Gagal terhubung ke Midtrans"),
+            backgroundColor: Colors.red,
           ),
         );
       }
     }
   }
 
-  /// FUNGSI SIMPAN KE DATABASE (Agar data masuk ke Tabel Transactions)
+  /// FUNGSI SIMPAN KE DATABASE
   void _saveTransactionToDatabase(double amount) async {
     setState(() => _isLoading = true);
     try {
@@ -93,9 +96,9 @@ class _DepositPageState extends State<DepositPage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Top Up Berhasil! Saldo telah ditambahkan."),
-            backgroundColor: Colors.green,
+          SnackBar(
+            content: const Text("Top Up Berhasil! Saldo telah ditambahkan."),
+            backgroundColor: primaryTeal, // DIUBAH: Teal untuk sukses
           ),
         );
         Navigator.pop(context, true); // Kembali ke dashboard & refresh saldo
@@ -119,7 +122,7 @@ class _DepositPageState extends State<DepositPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Top Up Saldo"),
-        backgroundColor: Colors.indigo,
+        backgroundColor: primaryTeal, // DIUBAH: Indigo -> Teal
         foregroundColor: Colors.white,
       ),
       body: Padding(
@@ -135,16 +138,18 @@ class _DepositPageState extends State<DepositPage> {
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
+              cursorColor: primaryTeal, // DIUBAH: Warna kursor
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               decoration: InputDecoration(
                 prefixText: "Rp ",
                 hintText: "0",
+                prefixStyle: TextStyle(color: primaryTeal, fontWeight: FontWeight.bold),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Colors.indigo, width: 2),
+                  borderSide: BorderSide(color: primaryTeal, width: 2), // DIUBAH: Teal border
                 ),
               ),
             ),
@@ -154,19 +159,42 @@ class _DepositPageState extends State<DepositPage> {
               style: TextStyle(color: Colors.grey, fontSize: 12),
             ),
             const Spacer(),
-            SizedBox(
+            
+            // Tombol dengan Gradient Teal
+            Container(
               width: double.infinity,
               height: 55,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [primaryTeal, secondaryTeal],
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: primaryTeal.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
               child: ElevatedButton(
                 onPressed: _isLoading ? null : _handleDeposit,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo,
+                  backgroundColor: Colors.transparent, // Agar gradient terlihat
+                  shadowColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
                     : const Text(
                         "Lanjut ke Pembayaran",
                         style: TextStyle(

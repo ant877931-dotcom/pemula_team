@@ -14,7 +14,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _supabase = Supabase.instance.client;
   final _pinController = TextEditingController();
 
-  // Fungsi untuk mengubah PIN di Database
+  // Fungsi untuk mengubah PIN di Database (Logika tetap sama)
   Future<void> _updatePin() async {
     if (_pinController.text.length < 6) {
       ScaffoldMessenger.of(
@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  // Dialog input PIN baru
+  // Dialog input PIN baru (Update style warna tombol)
   void _showChangePinDialog() {
     showDialog(
       context: context,
@@ -60,14 +60,25 @@ class _ProfilePageState extends State<ProfilePage> {
           decoration: const InputDecoration(
             hintText: "Masukkan 6 digit PIN baru",
             border: OutlineInputBorder(),
+            // Menyesuaikan warna fokus border
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF1A9591)),
+            ),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Batal"),
+            child: const Text("Batal", style: TextStyle(color: Colors.grey)),
           ),
-          ElevatedButton(onPressed: _updatePin, child: const Text("Simpan")),
+          ElevatedButton(
+            onPressed: _updatePin,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF1A9591), // DIUBAH: Teal
+              foregroundColor: Colors.white,
+            ),
+            child: const Text("Simpan"),
+          ),
         ],
       ),
     );
@@ -75,10 +86,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryTeal = Color(0xFF1A9591);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profil Saya"),
-        backgroundColor: Colors.indigo,
+        backgroundColor: primaryTeal, // DIUBAH: Teal
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
@@ -87,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             const CircleAvatar(
               radius: 50,
-              backgroundColor: Colors.indigo,
+              backgroundColor: primaryTeal, // DIUBAH: Teal
               child: Icon(Icons.person, size: 50, color: Colors.white),
             ),
             const SizedBox(height: 20),
@@ -99,22 +112,23 @@ class _ProfilePageState extends State<ProfilePage> {
 
             // Info Akun
             ListTile(
-              leading: const Icon(Icons.account_balance),
+              leading: const Icon(Icons.account_balance, color: primaryTeal), // DIUBAH: Warna Icon
               title: const Text("Nomor Rekening"),
               subtitle: Text(widget.user.accountNumber),
             ),
 
             // Tombol Ubah PIN
             ListTile(
-              leading: const Icon(Icons.lock_outline, color: Colors.orange),
+              leading: const Icon(Icons.lock_outline, color: primaryTeal), // DIUBAH: Teal (sebelumnya orange)
               title: const Text("Ubah PIN Keamanan"),
               subtitle: const Text("Ganti PIN untuk keamanan transaksi"),
               onTap: _showChangePinDialog,
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
             ),
 
             const SizedBox(height: 30),
 
-            // Tombol Logout
+            // Anda bisa menambahkan informasi tambahan di sini jika diperlukan
           ],
         ),
       ),

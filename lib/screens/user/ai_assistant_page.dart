@@ -20,6 +20,9 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
   final AIService _aiService = AIService();
   bool _isTyping = false;
 
+  // Warna Tema
+  final Color primaryTeal = const Color(0xFF1A9591);
+
   @override
   void initState() {
     super.initState();
@@ -27,7 +30,7 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
     _messages.add(
       ChatMessage(
         text:
-            "Halo! Saya asisten keuangan digital Anda. Ada yang bisa saya bantu terkait akun M-Banking Anda hari ini?",
+            "Halo! Saya asisten keuangan digital Anda. Ada yang bisa saya bantu terkait akun midBank Anda hari ini?",
         isUser: false,
         timestamp: DateTime.now(),
       ),
@@ -63,7 +66,7 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
     // Konteks sistem agar AI memahami data finansial user
     final String systemContext =
         """
-      Kamu adalah 'M-Banking Personal AI Assistant' yang cerdas dan ramah.
+      Kamu adalah 'midBank Personal AI Assistant' yang cerdas dan ramah.
       Data Akun User:
       - Email: ${widget.user.email}
       - Saldo Saat Ini: Rp ${widget.user.balance}
@@ -92,36 +95,39 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("AI Financial Assistant"),
-        backgroundColor: Colors.indigo,
+        backgroundColor: primaryTeal, // DIUBAH: Indigo -> Teal
         foregroundColor: Colors.white,
-        elevation: 2,
+        elevation: 0, // Dibuat flat agar lebih modern
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(16),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final msg = _messages[index];
-                return _buildChatBubble(msg);
-              },
-            ),
-          ),
-          if (_isTyping)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                "AI sedang berpikir...",
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: Colors.grey,
-                ),
+      body: Container(
+        color: Colors.white, // Latar belakang chat tetap putih bersih
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(16),
+                itemCount: _messages.length,
+                itemBuilder: (context, index) {
+                  final msg = _messages[index];
+                  return _buildChatBubble(msg);
+                },
               ),
             ),
-          _buildInputArea(),
-        ],
+            if (_isTyping)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  "midBank AI sedang berpikir...",
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: primaryTeal.withOpacity(0.7), // DIUBAH: Warna tulisan mengetik
+                  ),
+                ),
+              ),
+            _buildInputArea(),
+          ],
+        ),
       ),
     );
   }
@@ -136,16 +142,17 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!msg.isUser)
-            const CircleAvatar(
-              backgroundColor: Colors.indigo,
-              child: Icon(Icons.smart_toy, color: Colors.white, size: 20),
+            CircleAvatar(
+              backgroundColor: primaryTeal, // DIUBAH: Indigo -> Teal
+              child: const Icon(Icons.smart_toy, color: Colors.white, size: 20),
             ),
           const SizedBox(width: 8),
           Flexible(
             child: Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: msg.isUser ? Colors.indigo : Colors.grey[200],
+                // DIUBAH: Bubble User pakai Teal, Bubble AI pakai Abu-abu lembut
+                color: msg.isUser ? primaryTeal : const Color(0xFFF1F1F1),
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
                   topRight: const Radius.circular(16),
@@ -177,9 +184,10 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
           ),
           const SizedBox(width: 8),
           if (msg.isUser)
-            const CircleAvatar(
-              backgroundColor: Colors.orange,
-              child: Icon(Icons.person, color: Colors.white, size: 20),
+            CircleAvatar(
+              // DIUBAH: Avatar user menggunakan Teal muda agar senada (sebelumnya orange)
+              backgroundColor: const Color(0xFF67C3C0),
+              child: const Icon(Icons.person, color: Colors.white, size: 20),
             ),
         ],
       ),
@@ -191,39 +199,43 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
+        border: Border(top: BorderSide(color: Colors.grey.shade200)),
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _controller,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                hintText: "Tanya AI Assistant...",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: BorderSide.none,
+      child: SafeArea(
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                textCapitalization: TextCapitalization.sentences,
+                cursorColor: primaryTeal, // DIUBAH: Warna kursor teal
+                decoration: InputDecoration(
+                  hintText: "Tanya midBank AI...",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
                 ),
-                filled: true,
-                fillColor: Colors.grey[100],
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
+                onSubmitted: (_) => _sendMessage(),
               ),
-              onSubmitted: (_) => _sendMessage(),
             ),
-          ),
-          const SizedBox(width: 8),
-          CircleAvatar(
-            backgroundColor: Colors.indigo,
-            child: IconButton(
-              icon: const Icon(Icons.send, color: Colors.white),
-              onPressed: _sendMessage,
+            const SizedBox(width: 8),
+            CircleAvatar(
+              backgroundColor: primaryTeal, // DIUBAH: Indigo -> Teal
+              child: IconButton(
+                icon: const Icon(Icons.send, color: Colors.white),
+                onPressed: _sendMessage,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

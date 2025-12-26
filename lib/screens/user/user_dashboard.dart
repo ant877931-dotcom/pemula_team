@@ -159,7 +159,7 @@ class _UserDashboardState extends State<UserDashboard> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("M-Banking Dashboard"),
-        backgroundColor: Colors.indigo,
+        backgroundColor: const Color(0xFF1A9591), // DIUBAH: Indigo -> Teal
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -182,13 +182,14 @@ class _UserDashboardState extends State<UserDashboard> {
 
       // FAB UNTUK AI ASSISTANT
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.indigo,
+        backgroundColor: const Color(0xFF1A9591), // DIUBAH: Indigo -> Teal
         onPressed: () => _navigateTo(AIAssistantPage(user: _currentUser)),
         child: const Icon(Icons.smart_toy, color: Colors.white),
       ),
 
       body: RefreshIndicator(
         onRefresh: _fetchProfile,
+        color: const Color(0xFF1A9591), // DIUBAH: Indigo -> Teal
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.all(20),
@@ -218,12 +219,15 @@ class _UserDashboardState extends State<UserDashboard> {
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Colors.indigo, Colors.indigoAccent],
+          colors: [
+            Color(0xFF1A9591), // DIUBAH: Indigo -> Teal
+            Color(0xFF67C3C0), // DIUBAH: IndigoAccent -> Light Teal
+          ],
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.indigo.withOpacity(0.3),
+            color: const Color(0xFF1A9591).withOpacity(0.3), // DIUBAH: Shadow Teal
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -288,10 +292,10 @@ class _UserDashboardState extends State<UserDashboard> {
           Container(
             padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: Colors.indigo.withOpacity(0.1),
+              color: const Color(0xFF1A9591).withOpacity(0.1), // DIUBAH: Teal Soft Background
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Icon(icon, color: Colors.indigo, size: 28),
+            child:  Icon(icon, color: Color(0xFF1A9591), size: 28), // DIUBAH: Icon Teal
           ),
           const SizedBox(height: 8),
           Text(
@@ -308,7 +312,7 @@ class _UserDashboardState extends State<UserDashboard> {
       future: _transactionService.getTransactionHistory(_currentUser.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator(color: Color(0xFF1A9591)));
         final history = snapshot.data?.data ?? [];
         if (history.isEmpty)
           return const Center(child: Text("Tidak ada transaksi."));
