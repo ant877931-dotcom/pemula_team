@@ -23,6 +23,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   int _frozenUsers = 0;
   int _bannedUsers = 0;
   double _totalBalance = 0;
+  String _adminEmail = "Administrator";
 
   // --- PALET WARNA (Sesuai User Dashboard) ---
   final Color colorTop = const Color(0xFF007AFF);    
@@ -33,6 +34,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
   void initState() {
     super.initState();
     _fetchAdminStats();
+    _getCurrentAdminInfo();
+  }
+
+  // Mengambil info admin yang sedang login untuk ditampilkan di Drawer
+  void _getCurrentAdminInfo() {
+    final user = _supabase.auth.currentUser;
+    if (user != null) {
+      setState(() {
+        _adminEmail = user.email ?? "Administrator";
+      });
+    }
   }
 
   Future<void> _fetchAdminStats() async {
@@ -104,6 +116,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
+      drawer: _buildDrawer(), // Menerapkan Drawer
       body: Stack(
         children: [
           // Header Gradient Melengkung
@@ -134,15 +147,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      _buildAdminAppBar(),
+                      _buildAdminAppBar(), // Tombol Menu Trigger Drawer
                       const SizedBox(height: 20),
                       _buildGreetingHeader(),
                       const SizedBox(height: 25),
-                      _buildLiquidityCard(), // Kartu Total Saldo Seluruh Nasabah
+                      _buildLiquidityCard(),
                       const SizedBox(height: 30),
-                      _buildUserStatusGrid(), // Row Status Nasabah
+                      _buildUserStatusGrid(),
                       const SizedBox(height: 30),
-                      _buildChartSection(), // Grafik
+                      _buildChartSection(),
                       const SizedBox(height: 30),
                       const Text(
                         "Navigasi Kontrol",
@@ -161,19 +174,82 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
+  // --- WIDGET DRAWER (SIDE MENU) ---
+  Widget _buildDrawer() {
+    return Drawer(
+      child: Column(
+        children: [
+          // Header Drawer dengan Gradient & Info Admin
+          UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [colorTop, colorBottom]),
+            ),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: colorGold,
+              child: Icon(Icons.admin_panel_settings_rounded, size: 40, color: colorBottom),
+            ),
+            accountName: const Text("", ),
+            accountEmail: Text(_adminEmail),
+          ),
+          
+          // Menu Items
+          ListTile(
+            leading: Icon(Icons.dashboard_rounded, color: colorTop),
+            title: const Text("Dashboard"),
+            onTap: () => Navigator.pop(context), // Tutup drawer
+          ),
+          ListTile(
+            leading: Icon(Icons.people_alt_rounded, color: colorTop),
+            title: const Text("Manajemen Nasabah"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const UserManagementPage()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.psychology_rounded, color: Colors.purple),
+            title: const Text("AI Business Analyst"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminAIPage()));
+            },
+          ),
+          
+          const Spacer(), // Mendorong widget di bawahnya ke dasar layar
+          
+          const Divider(),
+          // Tombol Logout di paling bawah
+          ListTile(
+            leading: const Icon(Icons.logout_rounded, color: Color(0xFF003366)),
+            title: const Text(
+              "Logout", 
+              style: TextStyle(color: Color(0xFF003366), fontWeight: FontWeight.bold)
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              _handleLogout();
+            },
+          ),
+          const SizedBox(height: 20), // Padding tambahan di bawah
+        ],
+      ),
+    );
+  }
+
   Widget _buildAdminAppBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text(
-          "ADMIN CONSOLE",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18, letterSpacing: 2),
-        ),
-        IconButton(
-          icon: Icon(Icons.logout_rounded, color: colorGold, size: 28),
-          onPressed: _handleLogout,
-        ),
-      ],
+    return Builder(
+      builder: (context) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Tombol Menu untuk membuka Drawer
+          IconButton(
+            icon: Icon(Icons.menu_open_rounded, color: colorGold, size: 32),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+          
+          const SizedBox(width: 48),
+        ],
+      ),
     );
   }
 
@@ -186,7 +262,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w400),
         ),
         Text(
-          "ADMINISTRATOR",
+          "ADMIN",
           style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 1.1),
         ),
       ],

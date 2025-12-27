@@ -31,6 +31,9 @@ class _UserDashboardState extends State<UserDashboard> {
   final _transactionService = TransactionService();
   late RealtimeChannel _transactionChannel;
 
+  // --- LOGIKA HIDE/SHOW REKENING ---
+  bool _isAccountVisible = false;
+
   // --- PALET WARNA ---
   final Color colorTop = const Color(0xFF007AFF);    
   final Color colorBottom = const Color(0xFF003366); 
@@ -48,6 +51,11 @@ class _UserDashboardState extends State<UserDashboard> {
   void dispose() {
     Supabase.instance.client.removeChannel(_transactionChannel);
     super.dispose();
+  }
+
+  // Fungsi helper untuk menyensor nomor rekening sepenuhnya
+  String _maskAccountNumber() {
+    return "**** **** ****"; 
   }
 
   void _listenToNewTransactions() {
@@ -140,7 +148,6 @@ class _UserDashboardState extends State<UserDashboard> {
       drawer: _buildDrawer(),
       body: Stack(
         children: [
-          // Latar belakang biru melengkung yang lebih luas untuk menampung greeting
           Container(
             height: 300,
             decoration: BoxDecoration(
@@ -168,7 +175,7 @@ class _UserDashboardState extends State<UserDashboard> {
                     const SizedBox(height: 10),
                     _buildCustomAppBar(),
                     const SizedBox(height: 20),
-                    _buildGreetingHeader(), // Widget Kata Pembuka Baru
+                    _buildGreetingHeader(),
                     const SizedBox(height: 25),
                     _buildBalanceCard(),
                     const SizedBox(height: 30),
@@ -188,11 +195,9 @@ class _UserDashboardState extends State<UserDashboard> {
           ),
         ],
       ),
-    
     );
   }
 
-  // --- WIDGET KATA PEMBUKA (WELCOME HEADER) ---
   Widget _buildGreetingHeader() {
     String userName = _currentUser.email.split('@')[0];
     return Column(
@@ -222,7 +227,7 @@ class _UserDashboardState extends State<UserDashboard> {
               backgroundColor: colorGold,
               child: Icon(Icons.person, size: 40, color: colorBottom),
             ),
-            accountName: const Text("User Dashboard", style: TextStyle(fontWeight: FontWeight.bold)),
+            accountName: const Text("User Account", style: TextStyle(fontWeight: FontWeight.bold)),
             accountEmail: Text(_currentUser.email),
           ),
           ListTile(
@@ -246,7 +251,7 @@ class _UserDashboardState extends State<UserDashboard> {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Color(0xFF003366)),
-            title: const Text("Logout", style: TextStyle(color:Color(0xFF003366), fontWeight: FontWeight.bold)),
+            title: const Text("Logout", style: TextStyle(color: Color(0xFF003366), fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.pop(context);
               _handleLogout();
@@ -267,7 +272,6 @@ class _UserDashboardState extends State<UserDashboard> {
             icon: Icon(Icons.menu_open_rounded, color: colorGold, size: 32),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
-          
           const SizedBox(width: 48), 
         ],
       ),
@@ -302,15 +306,29 @@ class _UserDashboardState extends State<UserDashboard> {
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: colorBottom),
           ),
           const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: colorBottom.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              "No. Rekening: ${_currentUser.accountNumber}",
-              style: TextStyle(color: colorBottom, fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 1),
+          GestureDetector(
+            onTap: () => setState(() => _isAccountVisible = !_isAccountVisible),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: colorBottom.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "No. Rekening: ${_isAccountVisible ? _currentUser.accountNumber : _maskAccountNumber()}",
+                    style: TextStyle(color: colorBottom, fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 1),
+                  ),
+                  const SizedBox(width: 10),
+                  Icon(
+                    _isAccountVisible ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                    size: 18,
+                    color: colorTop,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -332,7 +350,17 @@ class _UserDashboardState extends State<UserDashboard> {
           _menuItem(Icons.add_circle_rounded, "TopUp", () => _navigateTo(DepositPage(user: _currentUser))),
           _menuItem(Icons.account_balance_wallet_rounded, "Tarik", () => _navigateTo(WithdrawalPage(user: _currentUser))),
           _menuItem(Icons.send_rounded, "Transfer", () => _navigateTo(TransferPage(user: _currentUser))),
-          _menuItem(Icons.history_rounded, "Update", () => _fetchProfile()),
+          // MENU UPDATE YANG DISESUAIKAN
+          _menuItem(Icons.cached_rounded, "Update", () {
+            _fetchProfile();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Data saldo diperbarui"),
+                duration: Duration(seconds: 1),
+                backgroundColor: Color(0xFF003366),
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -341,15 +369,21 @@ class _UserDashboardState extends State<UserDashboard> {
   Widget _menuItem(IconData icon, String label, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(15),
       child: Column(
         children: [
           Container(
             height: 55, width: 55,
             decoration: BoxDecoration(
-              color: colorTop.withOpacity(0.1),
+              color: colorBottom.withOpacity(0.08),
               shape: BoxShape.circle,
+              border: Border.all(color: colorGold.withOpacity(0.2), width: 1),
             ),
-            child: Icon(icon, color: colorTop, size: 28), 
+            child: Icon(
+              icon, 
+              color: (label == "Update") ? colorGold : colorTop, 
+              size: 28
+            ), 
           ),
           const SizedBox(height: 8),
           Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87)),
@@ -358,6 +392,7 @@ class _UserDashboardState extends State<UserDashboard> {
     );
   }
 
+// GANTIKAN SELURUH FUNGSI _buildTransactionHistory DENGAN INI
   Widget _buildTransactionHistory() {
     return FutureBuilder<ApiResponse<List<TransactionModel>>>(
       future: _transactionService.getTransactionHistory(_currentUser.id),
@@ -375,23 +410,97 @@ class _UserDashboardState extends State<UserDashboard> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: history.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
+          // Memberi jarak sedikit lebih lega antar kartu
+          separatorBuilder: (_, __) => const SizedBox(height: 12), 
           itemBuilder: (context, index) {
             final tx = history[index];
             final bool isCredit = tx.type == 'deposit' || tx.type == 'transfer_in';
+            
+            // --- 1. MAPPING TEKS & IKON SESUAI MENU ---
+            String title = "TRANSAKSI";
+            IconData iconData = Icons.swap_horiz_rounded;
+            
+            switch (tx.type) {
+              case 'deposit':
+                title = "TOP UP SALDO";
+                iconData = Icons.add_circle_outline_rounded;
+                break;
+              case 'withdrawal':
+                title = "TARIK TUNAI";
+                iconData = Icons.outbox_rounded; 
+                break;
+              case 'transfer_in':
+                title = "TERIMA TRANSFER";
+                iconData = Icons.move_to_inbox_rounded;
+                break;
+              case 'transfer_out':
+                title = "TRANSFER KELUAR";
+                iconData = Icons.send_rounded;
+                break;
+            }
+
             return Container(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18)),
+              padding: const EdgeInsets.symmetric(vertical: 8), 
+              // --- 2. CARD STYLING (SESUAI TEMA DASHBOARD) ---
+              decoration: BoxDecoration(
+                color: Colors.white, 
+                borderRadius: BorderRadius.circular(20), // Radius sudut lebih halus
+                // Menambahkan bayangan halus agar terlihat premium
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05), 
+                    blurRadius: 10, 
+                    offset: const Offset(0, 4)
+                  )
+                ],
+                 // Opsi: Tambahkan border emas tipis jika ingin sangat konsisten
+                 // border: Border.all(color: colorGold.withOpacity(0.1), width: 1),
+              ),
               child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: isCredit ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
-                  child: Icon(isCredit ? Icons.add : Icons.remove, color: isCredit ? Colors.green : Colors.red, size: 18),
+                // Leading Icon (Indikator Warna)
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    // Menggunakan warna yang sedikit lebih dalam untuk kesan elegan
+                    color: isCredit ? const Color(0xFFE8F5E9) : const Color(0xFFFFEBEE), // Hijau/Merah sangat muda
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    iconData, 
+                    // Warna Ikon lebih tegas
+                    color: isCredit ? const Color(0xFF2E7D32) : const Color(0xFFC62828), 
+                    size: 24
+                  ),
                 ),
-                title: Text(tx.type.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                subtitle: Text(tx.description ?? "-", style: const TextStyle(fontSize: 11)),
+                // Title (Judul Transaksi - MENGGUNAKAN WARNA TEMA)
+                title: Text(
+                  title, 
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900, // Font tebal premium
+                    fontSize: 13, 
+                    color: colorBottom, // <-- WARNA TEMA BIRU TUA DITERAPKAN DISINI
+                    letterSpacing: 0.5
+                  )
+                ),
+                // Subtitle (Deskripsi)
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    tx.description ?? "-", 
+                    style: TextStyle(fontSize: 11, color: Colors.grey[600], fontWeight: FontWeight.w500),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                // Trailing (Nominal Uang)
                 trailing: Text(
                   "${isCredit ? '+' : '-'}${tx.amount.toIDR()}",
-                  style: TextStyle(color: isCredit ? Colors.green : Colors.red, fontWeight: FontWeight.bold, fontSize: 14),
+                  style: TextStyle(
+                    // Warna nominal hijau/merah yang lebih "matang"
+                    color: isCredit ? const Color(0xFF2E7D32) : const Color(0xFFC62828), 
+                    fontWeight: FontWeight.w900, // Font angka sangat tebal
+                    fontSize: 14
+                  ),
                 ),
               ),
             );
