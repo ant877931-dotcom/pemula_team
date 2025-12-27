@@ -12,7 +12,11 @@ void main() async {
     anonKey: 'sb_publishable_52JXlePIvKxODzfa-VWwDw_0-uTWyod',
   );
 
-  await NotificationService.init(); // Tambahkan ini
+  await NotificationService.init(); 
 
-  runApp(MaterialApp(home: LoginScreen()));
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: LoginScreen()
+  )
+  );
 }

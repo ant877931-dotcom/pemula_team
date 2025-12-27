@@ -13,6 +13,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _supabase = Supabase.instance.client;
   bool _isLoading = false;
 
+  // --- KONSISTENSI WARNA DENGAN LOGIN SCREEN ---
+  final Color colorTop = const Color(0xFF007AFF);    // Biru Modern Cerah
+  final Color colorBottom = const Color(0xFF003366); // Biru Deep
+  final Color colorAccent = const Color(0xFFFFD700); // Gold Cerah
+
   Future<void> _handleResetPassword() async {
     final email = _emailController.text.trim();
 
@@ -24,11 +29,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() => _isLoading = true);
 
     try {
-      // Fungsi Supabase untuk mengirim email reset password
       await _supabase.auth.resetPasswordForEmail(
         email,
-        redirectTo:
-            'io.supabase.flutter://reset-callback/', // Sesuaikan dengan Deep Link Anda
+        redirectTo: 'io.supabase.flutter://reset-callback/',
       );
 
       if (mounted) {
@@ -36,7 +39,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           "Link reset password telah dikirim ke email Anda",
           Colors.green,
         );
-        Navigator.pop(context); // Kembali ke halaman login
+        Navigator.pop(context);
       }
     } catch (e) {
       _showMessage("Error: ${e.toString()}", Colors.red);
@@ -46,52 +49,136 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   void _showMessage(String msg, Color color) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: color));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: color),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Lupa Password")),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.mark_email_read, size: 100, color: Colors.indigo),
-            const SizedBox(height: 20),
-            const Text(
-              "Masukkan email terdaftar. Kami akan mengirimkan tautan untuk mengatur ulang password Anda.",
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: "Email",
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
+      // Menggunakan Container untuk background gradient penuh
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [colorTop, colorBottom],
+          ),
+        ),
+        child: SafeArea(
+          child: Stack(
+            children: [
+              // Tombol Back Manual
+              Positioned(
+                top: 10,
+                left: 10,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
+                ),
               ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _handleResetPassword,
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.indigo),
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        "Kirim Link Reset",
-                        style: TextStyle(color: Colors.white),
+              Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Icon Ilustrasi
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withOpacity(0.15),
+                        ),
+                        child: const Icon(
+                          Icons.mark_email_read_rounded,
+                          size: 80,
+                          color: Colors.white,
+                        ),
                       ),
+                      const SizedBox(height: 25),
+                      const Text(
+                        "Lupa Password?",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      const Text(
+                        "Masukkan email terdaftar. Kami akan mengirimkan tautan untuk mengatur ulang password Anda.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white70, fontSize: 16),
+                      ),
+                      const SizedBox(height: 40),
+
+                      // Input Field Card
+                      Container(
+                        padding: const EdgeInsets.all(25),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(25),
+                          border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        ),
+                        child: Column(
+                          children: [
+                            TextField(
+                              controller: _emailController,
+                              style: const TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                labelText: "Email",
+                                labelStyle: const TextStyle(color: Colors.white70),
+                                prefixIcon: Icon(Icons.email_outlined, color: colorAccent),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: colorAccent),
+                                ),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            const SizedBox(height: 40),
+                            
+                            // Button Reset
+                            SizedBox(
+                              width: double.infinity,
+                              height: 55,
+                              child: ElevatedButton(
+                                onPressed: _isLoading ? null : _handleResetPassword,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: colorAccent,
+                                  foregroundColor: colorBottom,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                child: _isLoading
+                                    ? CircularProgressIndicator(color: colorBottom)
+                                    : const Text(
+                                        "KIRIM LINK RESET",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          letterSpacing: 1.1,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

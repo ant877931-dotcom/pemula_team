@@ -1,3 +1,5 @@
+// lib/screens/user/ai_assistant_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/customer_user.dart';
@@ -20,17 +22,18 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
   final AIService _aiService = AIService();
   bool _isTyping = false;
 
-  // Warna Tema
-  final Color primaryTeal = const Color(0xFF1A9591);
+  // --- PALET WARNA KONSISTEN ---
+  final Color colorTop = const Color(0xFF007AFF);    
+  final Color colorBottom = const Color(0xFF003366); 
+  final Color colorGold = const Color(0xFFFFD700);   
 
   @override
   void initState() {
     super.initState();
-    // Pesan sambutan otomatis dari AI
+    // Pesan sambutan otomatis
     _messages.add(
       ChatMessage(
-        text:
-            "Halo! Saya asisten keuangan digital Anda. Ada yang bisa saya bantu terkait akun midBank Anda hari ini?",
+        text: "Halo ${widget.user.email.split('@')[0].toUpperCase()}! Saya adalah AI Financial Assistant Anda. Ada yang bisa saya bantu mengenai saldo atau tips menabung hari ini?",
         isUser: false,
         timestamp: DateTime.now(),
       ),
@@ -63,9 +66,7 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
     });
     _scrollToBottom();
 
-    // Konteks sistem agar AI memahami data finansial user
-    final String systemContext =
-        """
+    final String systemContext = """
       Kamu adalah 'midBank Personal AI Assistant' yang cerdas dan ramah.
       Data Akun User:
       - Email: ${widget.user.email}
@@ -74,9 +75,8 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
       
       Tugas kamu:
       1. Membantu user mengecek informasi saldo dan rekening mereka.
-      2. Memberikan saran finansial bijak (misal: cara menabung atau tips belanja).
+      2. Memberikan saran finansial bijak.
       3. Menjawab dengan bahasa Indonesia yang sopan dan profesional.
-      4. Jika user bertanya di luar topik perbankan/keuangan, arahkan kembali dengan sopan.
     """;
 
     final response = await _aiService.getAIResponse(userText, systemContext);
@@ -93,144 +93,205 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF4F7FA),
       appBar: AppBar(
-        title: const Text("AI Financial Assistant"),
-        backgroundColor: primaryTeal, // DIUBAH: Indigo -> Teal
+        title: const Text("AI ASSISTANT", style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2)),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [colorTop, colorBottom],
+            ),
+          ),
+        ),
         foregroundColor: Colors.white,
-        elevation: 0, // Dibuat flat agar lebih modern
+        elevation: 0,
       ),
-      body: Container(
-        color: Colors.white, // Latar belakang chat tetap putih bersih
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.all(16),
-                itemCount: _messages.length,
-                itemBuilder: (context, index) {
-                  final msg = _messages[index];
-                  return _buildChatBubble(msg);
-                },
+      body: Column(
+        children: [
+          // Banner Info Singkat
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            color: colorGold.withOpacity(0.15),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 16, color: colorBottom),
+                const SizedBox(width: 8),
+                Text(
+                  "Tanya mengenai saldo atau tips keuangan.",
+                  style: TextStyle(fontSize: 11, color: colorBottom, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          
+          Expanded(
+            child: ListView.builder(
+              controller: _scrollController,
+              padding: const EdgeInsets.all(20),
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final msg = _messages[index];
+                return _buildChatBubble(msg);
+              },
+            ),
+          ),
+          
+          if (_isTyping)
+            Padding(
+              padding: const EdgeInsets.only(left: 20, bottom: 10),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 15, height: 15,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: colorTop),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    "AI sedang merumuskan jawaban...",
+                    style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: colorBottom),
+                  ),
+                ],
               ),
             ),
-            if (_isTyping)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  "midBank AI sedang berpikir...",
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: primaryTeal.withOpacity(0.7), // DIUBAH: Warna tulisan mengetik
+            
+          _buildInputArea(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatBubble(ChatMessage msg) {
+    bool isUser = msg.isUser;
+    return Align(
+      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (!isUser) _buildAvatar(false),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: isUser 
+                    ? LinearGradient(colors: [colorTop, colorBottom]) 
+                    : null,
+                  color: isUser ? null : Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: const Radius.circular(20),
+                    topRight: const Radius.circular(20),
+                    bottomLeft: Radius.circular(isUser ? 20 : 0),
+                    bottomRight: Radius.circular(isUser ? 0 : 20),
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                  border: !isUser ? Border.all(color: colorGold.withOpacity(0.3)) : null,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      msg.text,
+                      style: TextStyle(
+                        color: isUser ? Colors.white : colorBottom,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      DateFormat('HH:mm').format(msg.timestamp),
+                      style: TextStyle(
+                        color: isUser ? Colors.white70 : Colors.black38,
+                        fontSize: 9,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            _buildInputArea(),
+            ),
+            const SizedBox(width: 8),
+            if (isUser) _buildAvatar(true),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildChatBubble(ChatMessage msg) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: msg.isUser
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!msg.isUser)
-            CircleAvatar(
-              backgroundColor: primaryTeal, // DIUBAH: Indigo -> Teal
-              child: const Icon(Icons.smart_toy, color: Colors.white, size: 20),
-            ),
-          const SizedBox(width: 8),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                // DIUBAH: Bubble User pakai Teal, Bubble AI pakai Abu-abu lembut
-                color: msg.isUser ? primaryTeal : const Color(0xFFF1F1F1),
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(16),
-                  topRight: const Radius.circular(16),
-                  bottomLeft: Radius.circular(msg.isUser ? 16 : 0),
-                  bottomRight: Radius.circular(msg.isUser ? 0 : 16),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    msg.text,
-                    style: TextStyle(
-                      color: msg.isUser ? Colors.white : Colors.black87,
-                      fontSize: 15,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    DateFormat('HH:mm').format(msg.timestamp),
-                    style: TextStyle(
-                      color: msg.isUser ? Colors.white70 : Colors.black54,
-                      fontSize: 10,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          if (msg.isUser)
-            CircleAvatar(
-              // DIUBAH: Avatar user menggunakan Teal muda agar senada (sebelumnya orange)
-              backgroundColor: const Color(0xFF67C3C0),
-              child: const Icon(Icons.person, color: Colors.white, size: 20),
-            ),
-        ],
+  Widget _buildAvatar(bool isUser) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: colorGold, width: 1.5),
+      ),
+      child: CircleAvatar(
+        radius: 16,
+        backgroundColor: isUser ? Colors.white : colorBottom,
+        child: Icon(
+          isUser ? Icons.person : Icons.psychology,
+          size: 18,
+          color: isUser ? colorBottom : colorGold,
+        ),
       ),
     );
   }
 
   Widget _buildInputArea() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey.shade200)),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5)),
+        ],
       ),
       child: SafeArea(
         child: Row(
           children: [
             Expanded(
-              child: TextField(
-                controller: _controller,
-                textCapitalization: TextCapitalization.sentences,
-                cursorColor: primaryTeal, // DIUBAH: Warna kursor teal
-                decoration: InputDecoration(
-                  hintText: "Tanya midBank AI...",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: Colors.grey[300]!),
                 ),
-                onSubmitted: (_) => _sendMessage(),
+                child: TextField(
+                  controller: _controller,
+                  cursorColor: colorTop,
+                  decoration: const InputDecoration(
+                    hintText: "Ketik pertanyaan keuangan...",
+                    hintStyle: TextStyle(fontSize: 14),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  ),
+                  onSubmitted: (_) => _sendMessage(),
+                ),
               ),
             ),
-            const SizedBox(width: 8),
-            CircleAvatar(
-              backgroundColor: primaryTeal, // DIUBAH: Indigo -> Teal
+            const SizedBox(width: 12),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [colorTop, colorBottom]),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(color: colorTop.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4)),
+                ],
+              ),
               child: IconButton(
-                icon: const Icon(Icons.send, color: Colors.white),
+                icon: Icon(Icons.send_rounded, color: colorGold, size: 22),
                 onPressed: _sendMessage,
               ),
             ),
