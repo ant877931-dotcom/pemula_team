@@ -37,7 +37,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
     _getCurrentAdminInfo();
   }
 
-  // Mengambil info admin yang sedang login untuk ditampilkan di Drawer
   void _getCurrentAdminInfo() {
     final user = _supabase.auth.currentUser;
     if (user != null) {
@@ -85,21 +84,68 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   Future<void> _handleLogout() async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text("Logout Admin"),
-        content: const Text("Apakah Anda yakin ingin keluar dari sistem manajemen?"),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text("Batal")),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text("Keluar", style: TextStyle(color: Colors.red)),
+    final bool? confirm = await showDialog<bool>(
+  context: context,
+  builder: (ctx) => AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    
+    // --- JUDUL & ICON ---
+    title: Column(
+      children: [
+        // Menggunakan Icon Admin/Logout dengan warna Emas
+        Icon(
+          Icons.admin_panel_settings_rounded, // Saya ganti ikon sedikit agar terlihat 'Admin'
+          size: 50, 
+          color: colorGold, 
+        ),
+        const SizedBox(height: 12),
+        Text(
+          "Logout Admin",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: colorBottom, // Biru Gelap
           ),
-        ],
+        ),
+      ],
+    ),
+    
+    // --- KONTEN ---
+    content: Text(
+      "Apakah Anda yakin ingin keluar dari sistem manajemen?",
+      textAlign: TextAlign.center,
+      style: TextStyle(color: colorBottom.withOpacity(0.8)),
+    ),
+    
+    // --- TOMBOL ---
+    actionsAlignment: MainAxisAlignment.spaceEvenly,
+    actionsPadding: const EdgeInsets.only(bottom: 16),
+    actions: [
+      // Tombol BATAL
+      TextButton(
+        onPressed: () => Navigator.pop(ctx, false),
+        child: Text(
+          "Batal",
+          style: TextStyle(
+            color: colorBottom, // Biru Gelap (Netral)
+            fontWeight: FontWeight.normal,
+          ),
+        ),
       ),
-    );
+
+      // Tombol KELUAR
+      TextButton(
+        onPressed: () => Navigator.pop(ctx, true),
+        child: Text(
+          "Keluar",
+          style: TextStyle(
+            color: colorTop, // Biru Terang (Action Utama)
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ],
+  ),
+);
 
     if (confirm == true) {
       await _supabase.auth.signOut();
@@ -116,7 +162,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
-      drawer: _buildDrawer(), // Menerapkan Drawer
+      drawer: _buildDrawer(),
       body: Stack(
         children: [
           // Header Gradient Melengkung
@@ -147,19 +193,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      _buildAdminAppBar(), // Tombol Menu Trigger Drawer
+                      _buildAdminAppBar(),
                       const SizedBox(height: 20),
                       _buildGreetingHeader(),
                       const SizedBox(height: 25),
                       _buildLiquidityCard(),
                       const SizedBox(height: 30),
-                      _buildUserStatusGrid(),
+                      _buildUserStatusGrid(), 
                       const SizedBox(height: 30),
                       _buildChartSection(),
                       const SizedBox(height: 30),
                       const Text(
                         "Navigasi Kontrol",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF333333)),
+                        style: TextStyle(
+                          fontSize: 18, 
+                          fontWeight: FontWeight.bold, 
+                          color: Color(0xFF333333)
+                        ),
                       ),
                       const SizedBox(height: 15),
                       _buildAdminMenu(),
@@ -174,12 +224,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  // --- WIDGET DRAWER (SIDE MENU) ---
+  // --- DRAWER ---
   Widget _buildDrawer() {
     return Drawer(
       child: Column(
         children: [
-          // Header Drawer dengan Gradient & Info Admin
           UserAccountsDrawerHeader(
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [colorTop, colorBottom]),
@@ -188,16 +237,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
               backgroundColor: colorGold,
               child: Icon(Icons.admin_panel_settings_rounded, size: 40, color: colorBottom),
             ),
-            accountName: const Text("", ),
+            accountName: const Text("", style: TextStyle(fontWeight: FontWeight.bold)),
             accountEmail: Text(_adminEmail),
           ),
-          
-          // Menu Items
-          ListTile(
-            leading: Icon(Icons.dashboard_rounded, color: colorTop),
-            title: const Text("Dashboard"),
-            onTap: () => Navigator.pop(context), // Tutup drawer
-          ),
+         
           ListTile(
             leading: Icon(Icons.people_alt_rounded, color: colorTop),
             title: const Text("Manajemen Nasabah"),
@@ -215,12 +258,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
             },
           ),
           
-          const Spacer(), // Mendorong widget di bawahnya ke dasar layar
+          const Spacer(),
           
           const Divider(),
-          // Tombol Logout di paling bawah
           ListTile(
-            leading: const Icon(Icons.logout_rounded, color: Color(0xFF003366)),
+            leading: const Icon(Icons.logout_rounded, color:Color(0xFF003366)),
             title: const Text(
               "Logout", 
               style: TextStyle(color: Color(0xFF003366), fontWeight: FontWeight.bold)
@@ -230,7 +272,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               _handleLogout();
             },
           ),
-          const SizedBox(height: 20), // Padding tambahan di bawah
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -241,12 +283,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
       builder: (context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Tombol Menu untuk membuka Drawer
           IconButton(
             icon: Icon(Icons.menu_open_rounded, color: colorGold, size: 32),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
-          
           const SizedBox(width: 48),
         ],
       ),
@@ -259,7 +299,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       children: [
         Text(
           "System Overview,",
-          style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w400),
+          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
         ),
         Text(
           "ADMIN",
@@ -287,7 +327,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Total Likuiditas Nasabah", style: TextStyle(color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w600)),
+              // PERBAIKAN: Warna teks lebih gelap
+              Text("Total Likuiditas Nasabah", style: TextStyle(color: Colors.grey[700], fontSize: 13, fontWeight: FontWeight.w600)),
               Icon(Icons.analytics_rounded, color: colorGold, size: 22),
             ],
           ),
@@ -297,42 +338,68 @@ class _AdminDashboardState extends State<AdminDashboard> {
             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: colorBottom),
           ),
           const SizedBox(height: 10),
-          const Text(
+          // PERBAIKAN: Warna teks lebih gelap
+          Text(
             "Total akumulasi saldo seluruh akun terdaftar",
-            style: TextStyle(color: Colors.black38, fontSize: 11),
+            style: TextStyle(color: Colors.grey[600], fontSize: 11),
           ),
         ],
       ),
     );
   }
 
+  // --- GRID STATUS AKUN ---
   Widget _buildUserStatusGrid() {
     return Row(
       children: [
         _statBox("Aktif", _activeUsers.toString(), Colors.blue),
-        const SizedBox(width: 12),
+        const SizedBox(width: 15),
         _statBox("Bekukan", _frozenUsers.toString(), Colors.orange),
-        const SizedBox(width: 12),
+        const SizedBox(width: 15),
         _statBox("Blokir", _bannedUsers.toString(), Colors.red),
       ],
     );
   }
 
+  // --- DESAIN KARTU STATUS (SUDAH DIPERBAIKI) ---
   Widget _statBox(String label, String value, Color color) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10)],
-          border: Border(top: BorderSide(color: color, width: 3)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04), 
+              blurRadius: 15, 
+              offset: const Offset(0, 5)
+            )
+          ],
+          border: Border.all(color: Colors.grey.withOpacity(0.1)),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 5),
-            Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: colorBottom)),
+            // BAGIAN ICON DIHAPUS AGAR TIDAK ERROR
+            
+            Text(
+              value, 
+              style: TextStyle(
+                fontSize: 22, 
+                fontWeight: FontWeight.w900, 
+                color: color // Menggunakan parameter color
+              )
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label, 
+              style: TextStyle(
+                fontSize: 12, 
+                color: Colors.grey[700], // PERBAIKAN: Lebih gelap
+                fontWeight: FontWeight.w600
+              )
+            ),
           ],
         ),
       ),
@@ -351,7 +418,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Grafik Distribusi", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+          // PERBAIKAN: Judul grafik lebih hitam
+          const Text(
+            "Grafik Distribusi", 
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 16)
+          ),
           const SizedBox(height: 20),
           Expanded(
             child: LineChart(
@@ -388,7 +459,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       children: [
         _adminMenuTile(
           "Manajemen Nasabah", 
-          "Kelola status, blokir, dan limit", 
+          "Kelola status", 
           Icons.people_alt_rounded, 
           colorTop, 
           () => Navigator.push(context, MaterialPageRoute(builder: (_) => const UserManagementPage()))
@@ -419,7 +490,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
           child: Icon(icon, color: color),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        // PERBAIKAN: Subtitle lebih gelap
+        subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
         trailing: const Icon(Icons.chevron_right_rounded),
         onTap: onTap,
       ),

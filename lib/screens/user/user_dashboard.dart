@@ -55,7 +55,7 @@ class _UserDashboardState extends State<UserDashboard> {
 
   // Fungsi helper untuk menyensor nomor rekening sepenuhnya
   String _maskAccountNumber() {
-    return "**** **** ****"; 
+    return "********"; 
   }
 
   void _listenToNewTransactions() {
@@ -88,22 +88,65 @@ class _UserDashboardState extends State<UserDashboard> {
   }
 
   Future<void> _handleLogout() async {
-    final bool? confirm = await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text("Konfirmasi Logout"),
-        content: const Text("Apakah Anda yakin ingin keluar?"),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Batal")),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text("Keluar", style: TextStyle(color: Colors.red)),
+   final bool? confirm = await showDialog(
+  context: context,
+  builder: (context) => AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    // Judul dengan Icon Emas
+    title: Column(
+      children: [
+        Icon(
+          Icons.logout_rounded, 
+          size: 50, 
+          color: colorGold, // Menggunakan warna Gold untuk icon
+        ),
+        const SizedBox(height: 12),
+        Text(
+          "Konfirmasi Logout",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: colorBottom, // Judul menggunakan Biru Gelap
           ),
-        ],
+        ),
+      ],
+    ),
+    
+    // Konten Teks
+    content: Text(
+      "Apakah Anda yakin ingin keluar?",
+      textAlign: TextAlign.center,
+      style: TextStyle(color: colorBottom.withOpacity(0.8)), // Teks sedikit lebih pudar
+    ),
+    
+    actionsAlignment: MainAxisAlignment.spaceEvenly,
+    actionsPadding: const EdgeInsets.only(bottom: 16),
+    actions: [
+      // --- Tombol BATAL ---
+      TextButton(
+        onPressed: () => Navigator.pop(context, false),
+        child: Text(
+          "Batal",
+          style: TextStyle(
+            color: colorBottom, // Warna Biru Gelap (Netral)
+            fontWeight: FontWeight.normal,
+          ),
+        ),
       ),
-    );
 
+      // --- Tombol KELUAR ---
+      TextButton(
+        onPressed: () => Navigator.pop(context, true),
+        child: Text(
+          "Keluar",
+          style: TextStyle(
+            color: colorTop, // Warna Biru Terang (Action)
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ],
+  ),
+);
     if (confirm == true) {
       try {
         await Supabase.instance.client.auth.signOut();
@@ -381,7 +424,7 @@ class _UserDashboardState extends State<UserDashboard> {
             ),
             child: Icon(
               icon, 
-              color: (label == "Update") ? colorGold : colorTop, 
+              color: (label == "Histori") ? colorGold : colorTop, 
               size: 28
             ), 
           ),

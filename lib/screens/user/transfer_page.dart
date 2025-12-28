@@ -174,7 +174,7 @@ class _TransferPageState extends State<TransferPage> {
                     child: Row(
                       children: [
                         Text(
-                          "No. Rek: ${_isAccountVisible ? widget.user.accountNumber : "**** **** ****"}", 
+                          "No. Rek: ${_isAccountVisible ? widget.user.accountNumber : "******"}", 
                           style: TextStyle(color: colorGold.withOpacity(0.8), fontSize: 13, fontWeight: FontWeight.bold)
                         ),
                         const SizedBox(width: 8),

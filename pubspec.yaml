@@ -40,6 +40,7 @@ dependencies:
   http: ^1.1.0
   flutter_local_notifications: ^19.5.0
   fl_chart: ^0.70.0
+  google_fonts: ^6.3.3
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,16 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/logo_midBank.png
+  fonts:
+    - family: RobotoSlab
+      fonts:
+        - asset: assets/fonts/RobotoSlab-Regular.ttf
+        - asset: assets/fonts/RobotoSlab-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/RobotoSlab-Bold.ttf
+          weight: 700
 
   # To add assets to your application, add an assets section, like this:
   # assets:

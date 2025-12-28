@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import '../../models/api_response.dart';
 import '../../models/app_user.dart';
-import '../../models/customer_user.dart'; // Import untuk casting
+import '../../models/customer_user.dart'; 
 import '../../services/auth_service.dart';
 import '../admin/admin_dashboard.dart';
-import '../user/user_dashboard.dart'; // Import dashboard user
+import '../user/user_dashboard.dart'; 
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 
@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
               result.message ??
                   (result.success ? "Login berhasil!" : "Login gagal."),
             ),
-            backgroundColor: result.success ? Colors.green : Colors.red,
+            backgroundColor: result.success ? colorBottom : Colors.white,
           ),
         );
 
@@ -112,23 +112,41 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    // Header Logo/Text
-                    const Icon(
-                      Icons.account_balance_rounded,
-                      size: 80,
-                      color: Colors.white,
-                    ),
+                    // Header Logo/
+                    Image.asset(
+      'assets/images/logo_midBank.png',
+      height: 80,
+    ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'MidBank',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 2,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                   RichText(
+  textAlign: TextAlign.center,
+  text: const TextSpan(
+    children: [
+      TextSpan(
+        text: 'Mid',
+        style: TextStyle(
+          fontSize: 32,
+          fontFamily: 'RobotoSlab',
+          fontWeight: FontWeight.w600, // Bold
+          color: Colors.white,
+          letterSpacing: 2,
+        ),
+      ),
+      TextSpan(
+        text: 'BANK',
+        style: TextStyle(
+          fontSize: 32,
+          fontFamily: 'RobotoSlab',
+          fontWeight: FontWeight.w700, // Bold
+          color: Color(0xFFFDB813),
+          letterSpacing: 2,
+        ),
+      ),
+    ],
+  ),
+),
+
+
                     const SizedBox(height: 50),
 
                     // Card Form Input
