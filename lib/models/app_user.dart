@@ -1,5 +1,3 @@
-// lib/models/app_user.dart
-
 import 'admin_user.dart';
 import 'customer_user.dart';
 
@@ -7,7 +5,6 @@ abstract class AppUser {
   final String id;
   final String email;
 
-  // Constructor AppUser menggunakan Named Arguments
   AppUser({required this.id, required this.email});
 
   String get role;

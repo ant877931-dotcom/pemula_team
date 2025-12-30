@@ -1,5 +1,3 @@
-// lib/screens/admin/admin_ai_page.dart
-
 import 'package:flutter/material.dart';
 import '../../services/admin_ai_service.dart';
 
@@ -12,13 +10,13 @@ class AdminAIPage extends StatefulWidget {
 
 class _AdminAIPageState extends State<AdminAIPage> {
   final _adminAIService = AdminAIService();
-  String _report = "Tekan tombol di bawah untuk meminta AI menganalisis data sistem dan memberikan wawasan bisnis.";
+  String _report =
+      "Tekan tombol di bawah untuk meminta AI menganalisis data sistem dan memberikan wawasan bisnis.";
   bool _isLoading = false;
 
-  // --- PALET WARNA KONSISTEN DENGAN DASHBOARD USER ---
-  final Color colorTop = const Color(0xFF007AFF);    
-  final Color colorBottom = const Color(0xFF003366); 
-  final Color colorGold = const Color(0xFFFFD700);   
+  final Color colorTop = const Color(0xFF007AFF);
+  final Color colorBottom = const Color(0xFF003366);
+  final Color colorGold = const Color(0xFFFFD700);
 
   void _generateReport() async {
     setState(() => _isLoading = true);
@@ -35,7 +33,6 @@ class _AdminAIPageState extends State<AdminAIPage> {
       backgroundColor: const Color(0xFFF4F7FA),
       body: Stack(
         children: [
-          // Header Gradient Melengkung (Sama dengan Dashboard)
           Container(
             height: 250,
             decoration: BoxDecoration(
@@ -50,17 +47,22 @@ class _AdminAIPageState extends State<AdminAIPage> {
               ),
             ),
           ),
-          
+
           SafeArea(
             child: Column(
               children: [
-                // Custom App Bar
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 10,
+                  ),
                   child: Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          color: Colors.white,
+                        ),
                         onPressed: () => Navigator.pop(context),
                       ),
                       const Expanded(
@@ -75,12 +77,11 @@ class _AdminAIPageState extends State<AdminAIPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 48), // Penyeimbang arrow back
+                      const SizedBox(width: 48),
                     ],
                   ),
                 ),
 
-                // Icon Dekoratif Utama
                 const SizedBox(height: 10),
                 Container(
                   padding: const EdgeInsets.all(15),
@@ -89,15 +90,10 @@ class _AdminAIPageState extends State<AdminAIPage> {
                     shape: BoxShape.circle,
                     border: Border.all(color: colorGold, width: 2),
                   ),
-                  child: Icon(
-                    Icons.auto_awesome,
-                    size: 45,
-                    color: colorGold,
-                  ),
+                  child: Icon(Icons.auto_awesome, size: 45, color: colorGold),
                 ),
                 const SizedBox(height: 30),
 
-                // Card Laporan
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -114,7 +110,10 @@ class _AdminAIPageState extends State<AdminAIPage> {
                             offset: const Offset(0, 10),
                           ),
                         ],
-                        border: Border.all(color: colorGold.withOpacity(0.3), width: 1.5),
+                        border: Border.all(
+                          color: colorGold.withOpacity(0.3),
+                          width: 1.5,
+                        ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +130,11 @@ class _AdminAIPageState extends State<AdminAIPage> {
                                   fontSize: 12,
                                 ),
                               ),
-                              Icon(Icons.analytics_outlined, color: colorGold, size: 20),
+                              Icon(
+                                Icons.analytics_outlined,
+                                color: colorGold,
+                                size: 20,
+                              ),
                             ],
                           ),
                           const Divider(height: 30),
@@ -141,16 +144,21 @@ class _AdminAIPageState extends State<AdminAIPage> {
                               child: _isLoading
                                   ? Center(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           const SizedBox(height: 50),
-                                          CircularProgressIndicator(color: colorTop),
+                                          CircularProgressIndicator(
+                                            color: colorTop,
+                                          ),
                                           const SizedBox(height: 20),
                                           Text(
                                             "AI sedang mengumpulkan data...",
                                             style: TextStyle(
                                               fontStyle: FontStyle.italic,
-                                              color: colorBottom.withOpacity(0.6),
+                                              color: colorBottom.withOpacity(
+                                                0.6,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -173,16 +181,13 @@ class _AdminAIPageState extends State<AdminAIPage> {
                   ),
                 ),
 
-                // Tombol Generate (Action)
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Container(
                     width: double.infinity,
                     height: 55,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [colorTop, colorBottom],
-                      ),
+                      gradient: LinearGradient(colors: [colorTop, colorBottom]),
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(

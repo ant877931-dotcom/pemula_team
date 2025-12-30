@@ -1,5 +1,3 @@
-// lib/screens/admin/user_management_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../utils/format_extensions.dart';
@@ -18,10 +16,10 @@ class _UserManagementPageState extends State<UserManagementPage> {
   bool _isLoading = true;
   final TextEditingController _searchController = TextEditingController();
 
-  // --- PALET WARNA ---
-  final Color colorTop = const Color(0xFF007AFF);    
-  final Color colorBottom = const Color(0xFF003366); 
-  final Color colorGold = const Color(0xFFFFD700);   
+
+  final Color colorTop = const Color(0xFF007AFF);
+  final Color colorBottom = const Color(0xFF003366);
+  final Color colorGold = const Color(0xFFFFD700);
 
   @override
   void initState() {
@@ -43,7 +41,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
           .from('profiles')
           .select('*')
           .neq('role', 'admin')
-          .order('created_at', ascending: false); // Urutkan dari yang terbaru
+          .order('created_at', ascending: false); 
 
       setState(() {
         _allUsers = List<Map<String, dynamic>>.from(data);
@@ -81,7 +79,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
 
       await _supabase.from('profiles').update(updateData).eq('id', userId);
       await _fetchUsers();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -92,7 +90,12 @@ class _UserManagementPageState extends State<UserManagementPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Gagal mengubah status: $e")));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(
+          "Gagal mengubah status: $e")
+          )
+        );
       }
     }
   }
@@ -103,18 +106,22 @@ class _UserManagementPageState extends State<UserManagementPage> {
       backgroundColor: const Color(0xFFF4F7FA),
       appBar: AppBar(
         title: const Text(
-          "MANAJEMEN NASABAH", 
-          style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.5, fontSize: 16)
+          "MANAJEMEN NASABAH",
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.5,
+            fontSize: 16,
+          ),
         ),
         centerTitle: true,
         backgroundColor: colorBottom,
         foregroundColor: colorGold,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(
+          color: Colors.white),
       ),
       body: Column(
         children: [
-          // HEADER SEARCH (Floating Style)
           Container(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
             decoration: BoxDecoration(
@@ -131,164 +138,241 @@ class _UserManagementPageState extends State<UserManagementPage> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5))
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
                   ],
                 ),
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText: "Cari Email atau No. Rekening...",
-                    hintStyle: TextStyle(color: Color(0xFF003366), fontSize: 14),
+                    hintStyle: TextStyle(
+                      color: Color(0xFF003366),
+                      fontSize: 14,
+                    ),
                     prefixIcon: Icon(Icons.search_rounded, color: colorBottom),
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 15,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
 
-          // LIST USER
           Expanded(
             child: _isLoading
                 ? Center(child: CircularProgressIndicator(color: colorBottom))
                 : _filteredUsers.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.person_off_rounded, size: 60, color: Colors.grey[300]),
-                            const SizedBox(height: 10),
-                            Text("Nasabah tidak ditemukan", style: TextStyle(color: Colors.grey[500])),
-                          ],
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.person_off_rounded,
+                          size: 60,
+                          color: Colors.grey[300],
                         ),
-                      )
-                    : RefreshIndicator(
-                        onRefresh: _fetchUsers,
-                        child: ListView.separated(
-                          padding: const EdgeInsets.all(20),
-                          itemCount: _filteredUsers.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 12),
-                          itemBuilder: (context, index) {
-                            final user = _filteredUsers[index];
-                            
-                            // Logika Status
-                            bool isBanned = user['is_banned'] ?? false;
-                            bool isFrozen = user['is_frozen'] ?? false;
-                            String statusLabel = "Aktif";
-                            Color statusColor = Colors.green;
-                            
-                            if (isBanned) {
-                              statusLabel = "Diblokir";
-                              statusColor = Colors.red;
-                            } else if (isFrozen) {
-                              statusLabel = "Dibekukan";
-                              statusColor = Colors.orange;
-                            }
+                        const SizedBox(height: 10),
+                        Text(
+                          "Nasabah tidak ditemukan",
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            ),
+                        ),
+                      ],
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: _fetchUsers,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(20),
+                      itemCount: _filteredUsers.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final user = _filteredUsers[index];
 
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4))
-                                ],
-                                border: Border.all(color: isBanned ? Colors.red.withOpacity(0.3) : Colors.transparent),
+                        // Logika Status
+                        bool isBanned = user['is_banned'] ?? false;
+                        bool isFrozen = user['is_frozen'] ?? false;
+                        String statusLabel = "Aktif";
+                        Color statusColor = Colors.green;
+
+                        if (isBanned) {
+                          statusLabel = "Diblokir";
+                          statusColor = Colors.red;
+                        } else if (isFrozen) {
+                          statusLabel = "Dibekukan";
+                          statusColor = Colors.orange;
+                        }
+
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.03),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
                               ),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                leading: CircleAvatar(
-                                  radius: 24,
-                                  backgroundColor: colorBottom.withOpacity(0.1),
+                            ],
+                            border: Border.all(
+                              color: isBanned
+                                  ? Colors.red.withOpacity(0.3)
+                                  : Colors.transparent,
+                            ),
+                          ),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            leading: CircleAvatar(
+                              radius: 24,
+                              backgroundColor: colorBottom.withOpacity(0.1),
+                              child: Text(
+                                (user['email'] ?? "U")
+                                    .substring(0, 1)
+                                    .toUpperCase(),
+                                style: TextStyle(
+                                  color: colorBottom,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            title: Row(
+                              children: [
+                                Expanded(
                                   child: Text(
-                                    (user['email'] ?? "U").substring(0, 1).toUpperCase(),
-                                    style: TextStyle(color: colorBottom, fontWeight: FontWeight.bold),
+                                    user['email'] ?? 'No Email',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                title: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        user['email'] ?? 'No Email',
-                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
+                              ],
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 4),
+                                Text(
+                                  "Acc: ${user['account_number'] ?? '-'}",
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
                                 ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      "Acc: ${user['account_number'] ?? '-'}",
-                                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      (user['balance'] as num).toDouble().toIDR(),
-                                      style: TextStyle(
-                                        color: colorBottom, 
-                                        fontWeight: FontWeight.w800, 
-                                        fontSize: 13
-                                      ),
-                                    ),
-                                  ],
+                                const SizedBox(height: 4),
+                                Text(
+                                  (user['balance'] as num).toDouble().toIDR(),
+                                  style: TextStyle(
+                                    color: colorBottom,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 13,
+                                  ),
                                 ),
-                                trailing: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    // Status Chip
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                      decoration: BoxDecoration(
-                                        color: statusColor.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: statusColor.withOpacity(0.5), width: 0.5),
-                                      ),
-                                      child: Text(
-                                        statusLabel,
-                                        style: TextStyle(color: statusColor, fontSize: 10, fontWeight: FontWeight.bold),
-                                      ),
+                              ],
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                // Status Chip
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: statusColor.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: statusColor.withOpacity(0.5),
+                                      width: 0.5,
                                     ),
-                                    const SizedBox(height: 4),
-                                    // Action Menu
-                                    SizedBox(
-                                      height: 24,
-                                      width: 24,
-                                      child: PopupMenuButton<String>(
-                                        padding: EdgeInsets.zero,
-                                        icon: Icon(Icons.more_horiz, color: Colors.grey[400]),
-                                        onSelected: (val) => _updateUserStatus(user['id'], val),
-                                        itemBuilder: (context) => [
-                                          _buildMenuItem('active', "Aktifkan Akun", Icons.check_circle_outline, Colors.green),
-                                          _buildMenuItem('frozen', "Bekukan Sementara", Icons.ac_unit, Colors.orange),
-                                          _buildMenuItem('banned', "Blokir Permanen", Icons.block, Colors.red),
-                                        ],
-                                      ),
+                                  ),
+                                  child: Text(
+                                    statusLabel,
+                                    style: TextStyle(
+                                      color: statusColor,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                                const SizedBox(height: 4),
+                                // Action Menu
+                                SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: PopupMenuButton<String>(
+                                    padding: EdgeInsets.zero,
+                                    icon: Icon(
+                                      Icons.more_horiz,
+                                      color: Colors.grey[400],
+                                    ),
+                                    onSelected: (val) =>
+                                        _updateUserStatus(user['id'], val),
+                                    itemBuilder: (context) => [
+                                      _buildMenuItem(
+                                        'active',
+                                        "Aktifkan Akun",
+                                        Icons.check_circle_outline,
+                                        Colors.green,
+                                      ),
+                                      _buildMenuItem(
+                                        'frozen',
+                                        "Bekukan Sementara",
+                                        Icons.ac_unit,
+                                        Colors.orange,
+                                      ),
+                                      _buildMenuItem(
+                                        'banned',
+                                        "Blokir Permanen",
+                                        Icons.block,
+                                        Colors.red,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
           ),
         ],
       ),
     );
   }
 
-  PopupMenuItem<String> _buildMenuItem(String value, String label, IconData icon, Color color) {
+  PopupMenuItem<String> _buildMenuItem(
+    String value,
+    String label,
+    IconData icon,
+    Color color,
+  ) {
     return PopupMenuItem(
       value: value,
       child: Row(
         children: [
           Icon(icon, color: color, size: 18),
           const SizedBox(width: 10),
-          Text(label, style: TextStyle(color: color, fontWeight: FontWeight.w500)),
+          Text(
+            label,
+            style: TextStyle(color: color, fontWeight: FontWeight.w500),
+          ),
         ],
       ),
     );

@@ -1,5 +1,3 @@
-// lib/screens/user/ai_assistant_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/customer_user.dart';
@@ -22,18 +20,18 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
   final AIService _aiService = AIService();
   bool _isTyping = false;
 
-  // --- PALET WARNA KONSISTEN ---
-  final Color colorTop = const Color(0xFF007AFF);    
-  final Color colorBottom = const Color(0xFF003366); 
-  final Color colorGold = const Color(0xFFFFD700);   
+
+  final Color colorTop = const Color(0xFF007AFF);
+  final Color colorBottom = const Color(0xFF003366);
+  final Color colorGold = const Color(0xFFFFD700);
 
   @override
   void initState() {
     super.initState();
-    // Pesan sambutan otomatis
     _messages.add(
       ChatMessage(
-        text: "Halo ${widget.user.email.split('@')[0].toUpperCase()}! Saya adalah AI Financial Assistant Anda. Ada yang bisa saya bantu mengenai saldo atau tips menabung hari ini?",
+        text:
+            "Halo ${widget.user.email.split('@')[0].toUpperCase()}! Saya adalah AI Financial Assistant Anda. Ada yang bisa saya bantu mengenai saldo atau tips menabung hari ini?",
         isUser: false,
         timestamp: DateTime.now(),
       ),
@@ -66,7 +64,8 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
     });
     _scrollToBottom();
 
-    final String systemContext = """
+    final String systemContext =
+        """
       Kamu adalah 'midBank Personal AI Assistant' yang cerdas dan ramah.
       Data Akun User:
       - Email: ${widget.user.email}
@@ -95,7 +94,12 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
       appBar: AppBar(
-        title: const Text("AI ASSISTANT", style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2)),
+        title: const Text(
+          "AI ASSISTANT",
+          style: TextStyle(
+            fontWeight: FontWeight.w900, 
+            letterSpacing: 2),
+        ),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -111,23 +115,28 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
       ),
       body: Column(
         children: [
-          // Banner Info Singkat
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             color: colorGold.withOpacity(0.15),
             child: Row(
               children: [
-                Icon(Icons.info_outline, size: 16, color: colorBottom),
+                Icon(Icons.info_outline, 
+                size: 16, 
+                color: colorBottom),
                 const SizedBox(width: 8),
                 Text(
                   "Tanya mengenai saldo atau tips keuangan.",
-                  style: TextStyle(fontSize: 11, color: colorBottom, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: colorBottom,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
           ),
-          
+
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
@@ -139,25 +148,32 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
               },
             ),
           ),
-          
+
           if (_isTyping)
             Padding(
               padding: const EdgeInsets.only(left: 20, bottom: 10),
               child: Row(
                 children: [
                   SizedBox(
-                    width: 15, height: 15,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: colorTop),
+                    width: 15,
+                    height: 15,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: colorTop,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Text(
                     "AI sedang merumuskan jawaban...",
-                    style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: colorBottom),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontStyle: FontStyle.italic,
+                      color: colorBottom,
+                    ),
                   ),
                 ],
               ),
             ),
-            
           _buildInputArea(),
         ],
       ),
@@ -170,7 +186,9 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.75,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -181,9 +199,9 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  gradient: isUser 
-                    ? LinearGradient(colors: [colorTop, colorBottom]) 
-                    : null,
+                  gradient: isUser
+                      ? LinearGradient(colors: [colorTop, colorBottom])
+                      : null,
                   color: isUser ? null : Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(20),
@@ -198,7 +216,9 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
                       offset: const Offset(0, 2),
                     ),
                   ],
-                  border: !isUser ? Border.all(color: colorGold.withOpacity(0.3)) : null,
+                  border: !isUser
+                      ? Border.all(color: colorGold.withOpacity(0.3))
+                      : null,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,7 +275,11 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5)),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
         ],
       ),
       child: SafeArea(
@@ -275,7 +299,10 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
                     hintText: "Ketik pertanyaan keuangan...",
                     hintStyle: TextStyle(fontSize: 14),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
                   ),
                   onSubmitted: (_) => _sendMessage(),
                 ),
@@ -287,7 +314,11 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
                 gradient: LinearGradient(colors: [colorTop, colorBottom]),
                 shape: BoxShape.circle,
                 boxShadow: [
-                  BoxShadow(color: colorTop.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4)),
+                  BoxShadow(
+                    color: colorTop.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
                 ],
               ),
               child: IconButton(

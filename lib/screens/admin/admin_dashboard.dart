@@ -25,10 +25,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
   double _totalBalance = 0;
   String _adminEmail = "Administrator";
 
-  // --- PALET WARNA (Sesuai User Dashboard) ---
-  final Color colorTop = const Color(0xFF007AFF);    
-  final Color colorBottom = const Color(0xFF003366); 
-  final Color colorGold = const Color(0xFFFFD700);   
+ 
+  final Color colorTop = const Color(0xFF007AFF);
+  final Color colorBottom = const Color(0xFF003366);
+  final Color colorGold = const Color(0xFFFFD700);
 
   @override
   void initState() {
@@ -85,67 +85,64 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   Future<void> _handleLogout() async {
     final bool? confirm = await showDialog<bool>(
-  context: context,
-  builder: (ctx) => AlertDialog(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    
-    // --- JUDUL & ICON ---
-    title: Column(
-      children: [
-        // Menggunakan Icon Admin/Logout dengan warna Emas
-        Icon(
-          Icons.admin_panel_settings_rounded, // Saya ganti ikon sedikit agar terlihat 'Admin'
-          size: 50, 
-          color: colorGold, 
-        ),
-        const SizedBox(height: 12),
-        Text(
-          "Logout Admin",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: colorBottom, // Biru Gelap
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20)
           ),
+        title: Column(
+          children: [         
+            Icon(
+              Icons
+             .admin_panel_settings_rounded, 
+              size: 50,
+              color: colorGold,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              "Logout Admin",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: colorBottom, 
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
-    
-    // --- KONTEN ---
-    content: Text(
-      "Apakah Anda yakin ingin keluar dari sistem manajemen?",
-      textAlign: TextAlign.center,
-      style: TextStyle(color: colorBottom.withOpacity(0.8)),
-    ),
-    
-    // --- TOMBOL ---
-    actionsAlignment: MainAxisAlignment.spaceEvenly,
-    actionsPadding: const EdgeInsets.only(bottom: 16),
-    actions: [
-      // Tombol BATAL
-      TextButton(
-        onPressed: () => Navigator.pop(ctx, false),
-        child: Text(
-          "Batal",
-          style: TextStyle(
-            color: colorBottom, // Biru Gelap (Netral)
-            fontWeight: FontWeight.normal,
-          ),
+        content: Text(
+          "Apakah Anda yakin ingin keluar dari sistem manajemen?",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: colorBottom.withOpacity(0.8)),
         ),
-      ),
 
-      // Tombol KELUAR
-      TextButton(
-        onPressed: () => Navigator.pop(ctx, true),
-        child: Text(
-          "Keluar",
-          style: TextStyle(
-            color: colorTop, // Biru Terang (Action Utama)
-            fontWeight: FontWeight.bold,
+        actionsAlignment: MainAxisAlignment.spaceEvenly,
+        actionsPadding: const EdgeInsets.only(bottom: 16),
+        actions: [
+       
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(
+              "Batal",
+              style: TextStyle(
+                color: colorBottom, 
+                fontWeight: FontWeight.normal,
+              ),
+            ),
           ),
-        ),
+
+         
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              "Keluar",
+              style: TextStyle(
+                color: colorTop, 
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
-    ],
-  ),
-);
+    );
 
     if (confirm == true) {
       await _supabase.auth.signOut();
@@ -165,7 +162,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
       drawer: _buildDrawer(),
       body: Stack(
         children: [
-          // Header Gradient Melengkung
           Container(
             height: 300,
             decoration: BoxDecoration(
@@ -180,51 +176,53 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
             ),
           ),
-          
+
           SafeArea(
-            child: _isLoading 
-            ? const Center(child: CircularProgressIndicator(color: Colors.white))
-            : RefreshIndicator(
-                onRefresh: _fetchAdminStats,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      _buildAdminAppBar(),
-                      const SizedBox(height: 20),
-                      _buildGreetingHeader(),
-                      const SizedBox(height: 25),
-                      _buildLiquidityCard(),
-                      const SizedBox(height: 30),
-                      _buildUserStatusGrid(), 
-                      const SizedBox(height: 30),
-                      _buildChartSection(),
-                      const SizedBox(height: 30),
-                      const Text(
-                        "Navigasi Kontrol",
-                        style: TextStyle(
-                          fontSize: 18, 
-                          fontWeight: FontWeight.bold, 
-                          color: Color(0xFF333333)
-                        ),
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(color: Colors.white),
+                  )
+                : RefreshIndicator(
+                    onRefresh: _fetchAdminStats,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+                          _buildAdminAppBar(),
+                          const SizedBox(height: 20),
+                          _buildGreetingHeader(),
+                          const SizedBox(height: 25),
+                          _buildLiquidityCard(),
+                          const SizedBox(height: 30),
+                          _buildUserStatusGrid(),
+                          const SizedBox(height: 30),
+                          _buildChartSection(),
+                          const SizedBox(height: 30),
+                          const Text(
+                            "Navigasi Kontrol",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF333333),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          _buildAdminMenu(),
+                          const SizedBox(height: 30),
+                        ],
                       ),
-                      const SizedBox(height: 15),
-                      _buildAdminMenu(),
-                      const SizedBox(height: 30),
-                    ],
+                    ),
                   ),
-                ),
-              ),
           ),
         ],
       ),
     );
   }
 
-  // --- DRAWER ---
+
   Widget _buildDrawer() {
     return Drawer(
       child: Column(
@@ -235,37 +233,59 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
             currentAccountPicture: CircleAvatar(
               backgroundColor: colorGold,
-              child: Icon(Icons.admin_panel_settings_rounded, size: 40, color: colorBottom),
+              child: Icon(
+                Icons.admin_panel_settings_rounded,
+                size: 40,
+                color: colorBottom,
+              ),
             ),
-            accountName: const Text("", style: TextStyle(fontWeight: FontWeight.bold)),
+            accountName: const Text(
+              "",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             accountEmail: Text(_adminEmail),
           ),
-         
+
           ListTile(
-            leading: Icon(Icons.people_alt_rounded, color: colorTop),
+            leading: Icon(Icons.people_alt_rounded,
+             color: colorTop
+             ),
             title: const Text("Manajemen Nasabah"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const UserManagementPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const UserManagementPage()),
+              );
             },
           ),
           ListTile(
-            leading: const Icon(Icons.psychology_rounded, color: Colors.purple),
+            leading: const Icon(Icons.psychology_rounded,
+             color: Colors.purple
+             ),
             title: const Text("AI Business Analyst"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminAIPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AdminAIPage()),
+              );
             },
           ),
-          
+
           const Spacer(),
-          
+
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.logout_rounded, color:Color(0xFF003366)),
+            leading: const Icon(Icons.logout_rounded, 
+            color: Color(0xFF003366)
+            ),
             title: const Text(
-              "Logout", 
-              style: TextStyle(color: Color(0xFF003366), fontWeight: FontWeight.bold)
+              "Logout",
+              style: TextStyle(
+                color: Color(0xFF003366),
+                fontWeight: FontWeight.bold,
+              ),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -284,7 +304,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            icon: Icon(Icons.menu_open_rounded, color: colorGold, size: 32),
+            icon: Icon(Icons.menu_open_rounded, 
+            color: colorGold, size: 32),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
           const SizedBox(width: 48),
@@ -299,11 +320,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
       children: [
         Text(
           "System Overview,",
-          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
         ),
         Text(
           "ADMIN",
-          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 1.1),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.1,
+          ),
         ),
       ],
     );
@@ -316,9 +346,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: colorGold.withOpacity(0.3), width: 1.5), 
+        border: Border.all(color: colorGold.withOpacity(0.3), width: 1.5),
         boxShadow: [
-          BoxShadow(color: colorBottom.withOpacity(0.15), blurRadius: 20, offset: const Offset(0, 10)),
+          BoxShadow(
+            color: colorBottom.withOpacity(0.15),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
         ],
       ),
       child: Column(
@@ -327,28 +361,40 @@ class _AdminDashboardState extends State<AdminDashboard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // PERBAIKAN: Warna teks lebih gelap
-              Text("Total Likuiditas Nasabah", style: TextStyle(color: Colors.grey[700], fontSize: 13, fontWeight: FontWeight.w600)),
+           
+              Text(
+                "Total Likuiditas Nasabah",
+                style: TextStyle(
+                  color: Colors.grey[700],
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               Icon(Icons.analytics_rounded, color: colorGold, size: 22),
             ],
           ),
           const SizedBox(height: 10),
           Text(
             _totalBalance.toIDR(),
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: colorBottom),
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: colorBottom,
+            ),
           ),
           const SizedBox(height: 10),
-          // PERBAIKAN: Warna teks lebih gelap
           Text(
             "Total akumulasi saldo seluruh akun terdaftar",
-            style: TextStyle(color: Colors.grey[600], fontSize: 11),
+            style: TextStyle(
+              color: Colors.grey[600], 
+              fontSize: 11,
+              ),
           ),
         ],
       ),
     );
   }
 
-  // --- GRID STATUS AKUN ---
   Widget _buildUserStatusGrid() {
     return Row(
       children: [
@@ -361,7 +407,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  // --- DESAIN KARTU STATUS (SUDAH DIPERBAIKI) ---
   Widget _statBox(String label, String value, Color color) {
     return Expanded(
       child: Container(
@@ -371,34 +416,32 @@ class _AdminDashboardState extends State<AdminDashboard> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04), 
-              blurRadius: 15, 
-              offset: const Offset(0, 5)
-            )
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
           ],
           border: Border.all(color: Colors.grey.withOpacity(0.1)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // BAGIAN ICON DIHAPUS AGAR TIDAK ERROR
-            
             Text(
-              value, 
+              value,
               style: TextStyle(
-                fontSize: 22, 
-                fontWeight: FontWeight.w900, 
-                color: color // Menggunakan parameter color
-              )
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+                color: color, 
+              ),
             ),
             const SizedBox(height: 4),
             Text(
-              label, 
+              label,
               style: TextStyle(
-                fontSize: 12, 
-                color: Colors.grey[700], // PERBAIKAN: Lebih gelap
-                fontWeight: FontWeight.w600
-              )
+                fontSize: 12,
+                color: Colors.grey[700], 
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),
@@ -413,15 +456,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.03),
+           blurRadius: 10),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // PERBAIKAN: Judul grafik lebih hitam
           const Text(
-            "Grafik Distribusi", 
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 16)
+            "Grafik Distribusi",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              fontSize: 16,
+            ),
           ),
           const SizedBox(height: 20),
           Expanded(
@@ -458,40 +507,65 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Column(
       children: [
         _adminMenuTile(
-          "Manajemen Nasabah", 
-          "Kelola status", 
-          Icons.people_alt_rounded, 
-          colorTop, 
-          () => Navigator.push(context, MaterialPageRoute(builder: (_) => const UserManagementPage()))
+          "Manajemen Nasabah",
+          "Kelola status",
+          Icons.people_alt_rounded,
+          colorTop,
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const UserManagementPage()),
+          ),
         ),
         const SizedBox(height: 12),
         _adminMenuTile(
-          "AI Business Analyst", 
-          "Prediksi dan analisis data sistem", 
-          Icons.psychology_rounded, 
-          Colors.purple, 
-          () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminAIPage()))
+          "AI Business Analyst",
+          "Prediksi dan analisis data sistem",
+          Icons.psychology_rounded,
+          Colors.purple,
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AdminAIPage()),
+          ),
         ),
       ],
     );
   }
 
-  Widget _adminMenuTile(String title, String subtitle, IconData icon, Color color, VoidCallback onTap) {
+  Widget _adminMenuTile(
+    String title,
+    String subtitle,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.02),
+           blurRadius: 10),
+        ],
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         leading: CircleAvatar(
           backgroundColor: color.withOpacity(0.1),
-          child: Icon(icon, color: color),
+          child: Icon(
+            icon,
+           color: color),
         ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-        // PERBAIKAN: Subtitle lebih gelap
-        subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold, 
+            fontSize: 15),
+        ),
+   
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+        ),
         trailing: const Icon(Icons.chevron_right_rounded),
         onTap: onTap,
       ),

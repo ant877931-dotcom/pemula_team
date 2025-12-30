@@ -1,9 +1,7 @@
-// lib/models/admin_user.dart
-
 import 'app_user.dart';
 
 class AdminUser extends AppUser {
-  // Menggunakan required super.field (Named Arguments)
+
   AdminUser({required super.id, required super.email});
 
   @override

@@ -48,12 +48,13 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                 ? const SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2
+                      ),
                   )
                 : Switch(value: _is2faEnabled, onChanged: _toggle2FA),
           ),
           const Divider(),
-          // Tambahkan fitur setting lain di sini
         ],
       ),
     );

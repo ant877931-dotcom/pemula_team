@@ -3,9 +3,9 @@ class TransactionModel {
   final String userId;
   final double amount;
   final String type;
-  final String? description; // Tambahkan ini
-  final String? status; // Tambahkan ini
-  final String? orderId; // Tambahkan ini
+  final String? description;
+  final String? status;
+  final String? orderId;
   final DateTime createdAt;
 
   TransactionModel({

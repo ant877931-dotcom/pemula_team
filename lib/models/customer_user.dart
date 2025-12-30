@@ -3,14 +3,14 @@ import 'app_user.dart';
 class CustomerUser extends AppUser {
   double _balance;
   final String accountNumber;
-  final String? pin; // Field baru untuk PIN
+  final String? pin;
 
   CustomerUser({
     required super.id,
     required super.email,
     required this.accountNumber,
     required double balance,
-    this.pin, // Masukkan ke constructor
+    this.pin,
   }) : _balance = balance;
 
   @override
@@ -28,7 +28,7 @@ class CustomerUser extends AppUser {
       email: json['email'] as String,
       accountNumber: json['account_number'] as String,
       balance: (json['balance'] as num).toDouble(),
-      pin: json['pin'] as String?, // Parsing kolom pin
+      pin: json['pin'] as String?,
     );
   }
 }

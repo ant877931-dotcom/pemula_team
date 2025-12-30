@@ -1,12 +1,12 @@
-// lib/screens/auth/login_screen.dart
+
 
 import 'package:flutter/material.dart';
 import '../../models/api_response.dart';
 import '../../models/app_user.dart';
-import '../../models/customer_user.dart'; 
+import '../../models/customer_user.dart';
 import '../../services/auth_service.dart';
 import '../admin/admin_dashboard.dart';
-import '../user/user_dashboard.dart'; 
+import '../user/user_dashboard.dart';
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 
@@ -26,8 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isLoading = false;
 
-
-  final Color colorTop = const Color(0xFF007AFF);    // Biru Terang (Atas)
+  final Color colorTop = const Color(0xFF007AFF); // Biru Terang (Atas)
   final Color colorBottom = const Color(0xFF002D57); // Biru Gelap (Bawah)
   final Color colorAccent = const Color(0xFFFDB813); // Kuning Aksen
 
@@ -78,10 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => UserDashboard(
-                  user: customerUser, 
-                  userId: customerUser.id, 
-                ),
+                builder: (context) =>
+                    UserDashboard(user: customerUser, userId: customerUser.id),
               ),
             );
           }
@@ -96,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(     
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -113,39 +110,35 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     // Header Logo/
-                    Image.asset(
-      'assets/images/logo_midBank.png',
-      height: 80,
-    ),
+                    Image.asset('assets/images/logo_midBank.png', height: 80),
                     const SizedBox(height: 10),
-                   RichText(
-  textAlign: TextAlign.center,
-  text: const TextSpan(
-    children: [
-      TextSpan(
-        text: 'Mid',
-        style: TextStyle(
-          fontSize: 32,
-          fontFamily: 'RobotoSlab',
-          fontWeight: FontWeight.w600, // Bold
-          color: Colors.white,
-          letterSpacing: 2,
-        ),
-      ),
-      TextSpan(
-        text: 'BANK',
-        style: TextStyle(
-          fontSize: 32,
-          fontFamily: 'RobotoSlab',
-          fontWeight: FontWeight.w700, // Bold
-          color: Color(0xFFFDB813),
-          letterSpacing: 2,
-        ),
-      ),
-    ],
-  ),
-),
-
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Mid',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontFamily: 'RobotoSlab',
+                              fontWeight: FontWeight.w600, // Bold
+                              color: Colors.white,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'BANK',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontFamily: 'RobotoSlab',
+                              fontWeight: FontWeight.w700, // Bold
+                              color: Color(0xFFFDB813),
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
                     const SizedBox(height: 50),
 
@@ -155,7 +148,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white.withOpacity(0.2)),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.2),
+                        ),
                       ),
                       child: Column(
                         children: [
@@ -165,7 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
                               labelText: 'Email',
-                              labelStyle: const TextStyle(color: Colors.white70),
+                              labelStyle: const TextStyle(
+                                color: Colors.white70,
+                              ),
                               prefixIcon: Icon(Icons.email, color: colorAccent),
                               enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white24),
@@ -188,7 +185,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              labelStyle: const TextStyle(color: Colors.white70),
+                              labelStyle: const TextStyle(
+                                color: Colors.white70,
+                              ),
                               prefixIcon: Icon(Icons.lock, color: colorAccent),
                               enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white24),
@@ -205,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                           const SizedBox(height: 40),
-                          
+
                           // Tombol Login
                           SizedBox(
                             width: double.infinity,
@@ -221,7 +220,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               onPressed: _isLoading ? null : _handleLogin,
                               child: _isLoading
-                                  ? CircularProgressIndicator(color: colorBottom)
+                                  ? CircularProgressIndicator(
+                                      color: colorBottom,
+                                    )
                                   : const Text(
                                       'LOGIN',
                                       style: TextStyle(
@@ -265,8 +266,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         'Belum punya akun? Daftar di sini.',
                         style: TextStyle(
-                          color: colorAccent, 
-                          fontWeight: FontWeight.w500
+                          color: colorAccent,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
