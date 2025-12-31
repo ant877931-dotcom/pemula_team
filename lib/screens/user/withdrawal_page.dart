@@ -153,7 +153,11 @@ class _WithdrawalPageState extends State<WithdrawalPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
       appBar: AppBar(
-        title: const Text("TARIK TUNAI", style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2)),
+        title: const Text(
+          "TARIK TUNAI", 
+        style: TextStyle(
+          fontWeight: FontWeight.w900,
+           letterSpacing: 2)),
         centerTitle: true,
         backgroundColor: colorBottom,
         foregroundColor: colorGold,
@@ -162,7 +166,6 @@ class _WithdrawalPageState extends State<WithdrawalPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- HEADER INFO SALDO ---
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(25),
@@ -241,8 +244,6 @@ class _WithdrawalPageState extends State<WithdrawalPage> {
                   ),
 
                   const SizedBox(height: 40),
-
-                  // --- TOMBOL KONFIRMASI ---
                   Container(
                     width: double.infinity,
                     height: 55,

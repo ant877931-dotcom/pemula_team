@@ -13,10 +13,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _supabase = Supabase.instance.client;
   bool _isLoading = false;
 
-  // --- KONSISTENSI WARNA DENGAN LOGIN SCREEN ---
-  final Color colorTop = const Color(0xFF007AFF);    // Biru Modern Cerah
-  final Color colorBottom = const Color(0xFF003366); // Biru Deep
-  final Color colorAccent = const Color(0xFFFFD700); // Gold Cerah
+
+  final Color colorTop = const Color(0xFF007AFF);    
+  final Color colorBottom = const Color(0xFF003366); 
+  final Color colorAccent = const Color(0xFFFFD700); 
 
   Future<void> _handleResetPassword() async {
     final email = _emailController.text.trim();
@@ -57,7 +57,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Menggunakan Container untuk background gradient penuh
+     
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -71,7 +71,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         child: SafeArea(
           child: Stack(
             children: [
-              // Tombol Back Manual
               Positioned(
                 top: 10,
                 left: 10,
@@ -112,7 +111,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       const Text(
                         "Masukkan email terdaftar. Kami akan mengirimkan tautan untuk mengatur ulang password Anda.",
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white70, fontSize: 16),
+                        style: TextStyle(
+                          color: Colors.white70, 
+                          fontSize: 16),
                       ),
                       const SizedBox(height: 40),
 
@@ -166,8 +167,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                           letterSpacing: 1.1,
-                                        ),
                                       ),
+                                 ),
                               ),
                             ),
                           ],

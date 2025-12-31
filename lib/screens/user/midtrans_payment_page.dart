@@ -24,7 +24,6 @@ class _MidtransPaymentPageState extends State<MidtransPaymentPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: (url) {
-            // Deteksi jika user sudah selesai membayar (Midtrans biasanya redirect ke URL sukses)
             if (url.contains('finish') || url.contains('success')) {
               Navigator.pop(context, true);
             }

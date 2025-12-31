@@ -1,5 +1,3 @@
-// lib/screens/user/user_dashboard.dart
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:m_banking/screens/auth/login_screen.dart';
@@ -31,10 +29,8 @@ class _UserDashboardState extends State<UserDashboard> {
   final _transactionService = TransactionService();
   late RealtimeChannel _transactionChannel;
 
-  // --- LOGIKA HIDE/SHOW REKENING ---
   bool _isAccountVisible = false;
 
-  // --- PALET WARNA ---
   final Color colorTop = const Color(0xFF007AFF);    
   final Color colorBottom = const Color(0xFF003366); 
   final Color colorGold = const Color(0xFFFFD700);   
@@ -53,7 +49,6 @@ class _UserDashboardState extends State<UserDashboard> {
     super.dispose();
   }
 
-  // Fungsi helper untuk menyensor nomor rekening sepenuhnya
   String _maskAccountNumber() {
     return "********"; 
   }
@@ -92,54 +87,52 @@ class _UserDashboardState extends State<UserDashboard> {
   context: context,
   builder: (context) => AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    // Judul dengan Icon Emas
     title: Column(
       children: [
         Icon(
           Icons.logout_rounded, 
           size: 50, 
-          color: colorGold, // Menggunakan warna Gold untuk icon
+          color: colorGold, 
         ),
         const SizedBox(height: 12),
         Text(
           "Konfirmasi Logout",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: colorBottom, // Judul menggunakan Biru Gelap
+            color: colorBottom, 
           ),
         ),
       ],
     ),
     
-    // Konten Teks
     content: Text(
       "Apakah Anda yakin ingin keluar?",
       textAlign: TextAlign.center,
-      style: TextStyle(color: colorBottom.withOpacity(0.8)), // Teks sedikit lebih pudar
+      style: TextStyle(
+        color: colorBottom.withOpacity(0.8)
+        ), 
     ),
     
     actionsAlignment: MainAxisAlignment.spaceEvenly,
     actionsPadding: const EdgeInsets.only(bottom: 16),
     actions: [
-      // --- Tombol BATAL ---
       TextButton(
         onPressed: () => Navigator.pop(context, false),
         child: Text(
           "Batal",
           style: TextStyle(
-            color: colorBottom, // Warna Biru Gelap (Netral)
+            color: colorBottom, 
             fontWeight: FontWeight.normal,
           ),
         ),
       ),
 
-      // --- Tombol KELUAR ---
       TextButton(
         onPressed: () => Navigator.pop(context, true),
         child: Text(
           "Keluar",
           style: TextStyle(
-            color: colorTop, // Warna Biru Terang (Action)
+            color: colorTop,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -157,7 +150,8 @@ class _UserDashboardState extends State<UserDashboard> {
           );
         }
       } catch (e) {
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+        if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: $e")));
       }
     }
   }
@@ -180,7 +174,8 @@ class _UserDashboardState extends State<UserDashboard> {
   }
 
   void _navigateTo(Widget page) async {
-    final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+    final result = await Navigator.push(
+      context, MaterialPageRoute(builder: (_) => page));
     if (result == true) _fetchProfile();
   }
 
@@ -435,7 +430,6 @@ class _UserDashboardState extends State<UserDashboard> {
     );
   }
 
-// GANTIKAN SELURUH FUNGSI _buildTransactionHistory DENGAN INI
   Widget _buildTransactionHistory() {
     return FutureBuilder<ApiResponse<List<TransactionModel>>>(
       future: _transactionService.getTransactionHistory(_currentUser.id),
@@ -447,19 +441,21 @@ class _UserDashboardState extends State<UserDashboard> {
           ));
         }
         final history = snapshot.data?.data ?? [];
-        if (history.isEmpty) return const Center(child: Text("Tidak ada aktivitas transaksi."));
+        if (history.isEmpty) return const Center(
+          child: Text(
+            "Tidak ada aktivitas transaksi.",
+            )
+            );
 
         return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: history.length,
-          // Memberi jarak sedikit lebih lega antar kartu
           separatorBuilder: (_, __) => const SizedBox(height: 12), 
           itemBuilder: (context, index) {
             final tx = history[index];
             final bool isCredit = tx.type == 'deposit' || tx.type == 'transfer_in';
             
-            // --- 1. MAPPING TEKS & IKON SESUAI MENU ---
             String title = "TRANSAKSI";
             IconData iconData = Icons.swap_horiz_rounded;
             
@@ -484,11 +480,10 @@ class _UserDashboardState extends State<UserDashboard> {
 
             return Container(
               padding: const EdgeInsets.symmetric(vertical: 8), 
-              // --- 2. CARD STYLING (SESUAI TEMA DASHBOARD) ---
               decoration: BoxDecoration(
                 color: Colors.white, 
-                borderRadius: BorderRadius.circular(20), // Radius sudut lebih halus
-                // Menambahkan bayangan halus agar terlihat premium
+                borderRadius: BorderRadius.circular(20),
+          
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05), 
@@ -496,36 +491,33 @@ class _UserDashboardState extends State<UserDashboard> {
                     offset: const Offset(0, 4)
                   )
                 ],
-                 // Opsi: Tambahkan border emas tipis jika ingin sangat konsisten
-                 // border: Border.all(color: colorGold.withOpacity(0.1), width: 1),
+
               ),
               child: ListTile(
-                // Leading Icon (Indikator Warna)
                 leading: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    // Menggunakan warna yang sedikit lebih dalam untuk kesan elegan
-                    color: isCredit ? const Color(0xFFE8F5E9) : const Color(0xFFFFEBEE), // Hijau/Merah sangat muda
+   
+                    color: isCredit ? const Color(0xFFE8F5E9) : const Color(0xFFFFEBEE),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     iconData, 
-                    // Warna Ikon lebih tegas
+           
                     color: isCredit ? const Color(0xFF2E7D32) : const Color(0xFFC62828), 
                     size: 24
                   ),
                 ),
-                // Title (Judul Transaksi - MENGGUNAKAN WARNA TEMA)
                 title: Text(
                   title, 
                   style: TextStyle(
-                    fontWeight: FontWeight.w900, // Font tebal premium
+                    fontWeight: FontWeight.w900, 
                     fontSize: 13, 
-                    color: colorBottom, // <-- WARNA TEMA BIRU TUA DITERAPKAN DISINI
+                    color: colorBottom, 
                     letterSpacing: 0.5
                   )
                 ),
-                // Subtitle (Deskripsi)
+
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Text(
@@ -535,13 +527,13 @@ class _UserDashboardState extends State<UserDashboard> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                // Trailing (Nominal Uang)
+
                 trailing: Text(
                   "${isCredit ? '+' : '-'}${tx.amount.toIDR()}",
                   style: TextStyle(
                     // Warna nominal hijau/merah yang lebih "matang"
                     color: isCredit ? const Color(0xFF2E7D32) : const Color(0xFFC62828), 
-                    fontWeight: FontWeight.w900, // Font angka sangat tebal
+                    fontWeight: FontWeight.w900, 
                     fontSize: 14
                   ),
                 ),

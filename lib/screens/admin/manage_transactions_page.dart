@@ -14,7 +14,8 @@ class _ManageTransactionsPageState extends State<ManageTransactionsPage> {
       appBar: AppBar(title: const Text(
         "Log Transaksi",
         )),
-      body: const Center(child: Text(
+      body: const Center(
+        child: Text(
         "Data Transaksi Akan Muncul Di Sini",
         )
         ),

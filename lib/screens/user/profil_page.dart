@@ -16,21 +16,21 @@ class _ProfilePageState extends State<ProfilePage> {
   final _supabase = Supabase.instance.client;
   final _pinController = TextEditingController();
 
-  // --- LOGIKA HIDE/SHOW REKENING ---
+
   bool _isAccountVisible = false;
 
-  // --- PALET WARNA (Modern Electric Blue & Gold) ---
+
   final Color colorTop = const Color(0xFF007AFF);    
   final Color colorBottom = const Color(0xFF003366); 
   final Color colorGold = const Color(0xFFFFD700); 
   final Color colorGoldDark = const Color(0xFFB8860B); 
 
-  // Fungsi untuk menyensor nomor rekening sepenuhnya
+
   String _maskAccountNumber() {
     return "************"; 
   }
 
-  // Fungsi Update PIN (Logika Asli Tetap)
+
   Future<void> _updatePin() async {
     if (_pinController.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -176,14 +176,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 90),
 
-            // --- USER EMAIL ---
+
             Text(
               widget.user.email.toUpperCase(),
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: colorBottom, letterSpacing: 0.5),
             ),
             const SizedBox(height: 12),
-            
-            // --- BADGE NASABAH PRIORITAS (GOLD CONTRAST) ---
+
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
@@ -206,12 +205,11 @@ class _ProfilePageState extends State<ProfilePage> {
             
             const SizedBox(height: 40),
 
-            // --- INFO CARDS SECTION ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Column(
                 children: [
-                  // CARD NOMOR REKENING (HIDE/SHOW LOGIC)
+
                   _buildProfileCard(
                     icon: Icons.account_balance_wallet_rounded,
                     title: "NOMOR REKENING",

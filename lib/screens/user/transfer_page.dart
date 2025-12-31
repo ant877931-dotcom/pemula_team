@@ -139,7 +139,11 @@ class _TransferPageState extends State<TransferPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
       appBar: AppBar(
-        title: const Text("TRANSFER", style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2)),
+        title: const Text(
+          "TRANSFER", 
+          style: TextStyle(
+            fontWeight: FontWeight.w900, 
+            letterSpacing: 2)),
         centerTitle: true,
         backgroundColor: colorBottom,
         foregroundColor: colorGold,
@@ -168,7 +172,6 @@ class _TransferPageState extends State<TransferPage> {
                     ],
                   ),
                   const SizedBox(height: 5),
-                  // PERBAIKAN: Klik teks ini untuk Hide/Show nomor rekening
                   GestureDetector(
                     onTap: () => setState(() => _isAccountVisible = !_isAccountVisible),
                     child: Row(

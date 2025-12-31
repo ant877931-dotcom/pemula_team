@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import '../../models/api_response.dart';
 import '../../models/app_user.dart';
@@ -26,9 +24,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isLoading = false;
 
-  final Color colorTop = const Color(0xFF007AFF); // Biru Terang (Atas)
-  final Color colorBottom = const Color(0xFF002D57); // Biru Gelap (Bawah)
-  final Color colorAccent = const Color(0xFFFDB813); // Kuning Aksen
+  final Color colorTop = const Color(0xFF007AFF);
+  final Color colorBottom = const Color(0xFF002D57); 
+  final Color colorAccent = const Color(0xFFFDB813); 
 
   @override
   void dispose() {
@@ -110,7 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     // Header Logo/
-                    Image.asset('assets/images/logo_midBank.png', height: 80),
+                    Image.asset('assets/images/logo_midBank.png', 
+                    height: 80),
                     const SizedBox(height: 10),
                     RichText(
                       textAlign: TextAlign.center,
@@ -141,8 +140,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
 
                     const SizedBox(height: 50),
-
-                    // Card Form Input
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
@@ -237,8 +234,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
 
                     const SizedBox(height: 20),
-
-                    // Links
                     TextButton(
                       onPressed: () {
                         Navigator.push(

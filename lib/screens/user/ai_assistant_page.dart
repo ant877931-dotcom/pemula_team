@@ -20,7 +20,6 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
   final AIService _aiService = AIService();
   bool _isTyping = false;
 
-
   final Color colorTop = const Color(0xFF007AFF);
   final Color colorBottom = const Color(0xFF003366);
   final Color colorGold = const Color(0xFFFFD700);
@@ -96,9 +95,7 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
       appBar: AppBar(
         title: const Text(
           "AI ASSISTANT",
-          style: TextStyle(
-            fontWeight: FontWeight.w900, 
-            letterSpacing: 2),
+          style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2),
         ),
         centerTitle: true,
         flexibleSpace: Container(
@@ -121,9 +118,7 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
             color: colorGold.withOpacity(0.15),
             child: Row(
               children: [
-                Icon(Icons.info_outline, 
-                size: 16, 
-                color: colorBottom),
+                Icon(Icons.info_outline, size: 16, color: colorBottom),
                 const SizedBox(width: 8),
                 Text(
                   "Tanya mengenai saldo atau tips keuangan.",
