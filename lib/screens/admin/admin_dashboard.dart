@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:m_banking/screens/auth/login_screen.dart';
+import 'package:midbank/screens/auth/login_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../utils/format_extensions.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:m_banking/screens/auth/login_screen.dart';
+import 'package:midbank/screens/auth/login_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/customer_user.dart';
 import '../../models/transaction_model.dart';

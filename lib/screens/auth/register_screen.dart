@@ -22,10 +22,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _isLoading = false;
 
-  // --- KONSISTENSI WARNA ---
-  final Color colorTop = const Color(0xFF007AFF);    // Biru Modern
-  final Color colorBottom = const Color(0xFF003366); // Biru Deep
-  final Color colorAccent = const Color(0xFFFFD700); // Gold Cerah
+ 
+  final Color colorTop = const Color(0xFF007AFF);    
+  final Color colorBottom = const Color(0xFF003366); 
+  final Color colorAccent = const Color(0xFFFFD700); 
 
   @override
   void dispose() {
@@ -77,7 +77,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Menggunakan Container untuk background gradient penuh (tanpa AppBar standar)
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -115,7 +114,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 40),
 
-                    // Card Form Input (Glassmorphism Effect)
                     Container(
                       padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
@@ -194,8 +192,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
                           const SizedBox(height: 40),
-
-                          // Tombol Daftar
                           SizedBox(
                             width: double.infinity,
                             height: 55,
