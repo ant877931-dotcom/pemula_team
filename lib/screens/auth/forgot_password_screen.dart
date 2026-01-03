@@ -13,7 +13,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _supabase = Supabase.instance.client;
   bool _isLoading = false;
 
-
   final Color colorTop = const Color(0xFF007AFF);    
   final Color colorBottom = const Color(0xFF003366); 
   final Color colorAccent = const Color(0xFFFFD700); 
@@ -22,10 +21,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
-      _showMessage("Silakan masukkan email Anda", Colors.orange);
+      _showMessage("Silakan masukkan email Anda",
+       Colors.orange);
       return;
     }
-
     setState(() => _isLoading = true);
 
     try {
@@ -42,7 +41,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         Navigator.pop(context);
       }
     } catch (e) {
-      _showMessage("Error: ${e.toString()}", Colors.red);
+      _showMessage("Error: ${e.toString()}", 
+      Colors.red
+      );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -50,14 +51,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   void _showMessage(String msg, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: color),
+      SnackBar(content: Text(msg), 
+      backgroundColor: color,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -75,7 +77,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 top: 10,
                 left: 10,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                   color: Colors.white
+                   ),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
@@ -116,36 +121,43 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           fontSize: 16),
                       ),
                       const SizedBox(height: 40),
-
-                      // Input Field Card
                       Container(
                         padding: const EdgeInsets.all(25),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(25),
-                          border: Border.all(color: Colors.white.withOpacity(0.1)),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.1)
+                            ),
                         ),
                         child: Column(
                           children: [
                             TextField(
                               controller: _emailController,
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(
+                                color: Colors.white
+                                ),
                               decoration: InputDecoration(
                                 labelText: "Email",
-                                labelStyle: const TextStyle(color: Colors.white70),
-                                prefixIcon: Icon(Icons.email_outlined, color: colorAccent),
+                                labelStyle: const TextStyle(
+                                  color: Colors.white70
+                                  ),
+                                prefixIcon: Icon(
+                                  Icons.email_outlined,
+                                   color: colorAccent
+                                   ),
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                  borderSide: BorderSide(
+                                    color: Colors.white.withOpacity(0.3)),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: colorAccent),
+                                  borderSide: BorderSide(
+                                    color: colorAccent),
                                 ),
                               ),
                               keyboardType: TextInputType.emailAddress,
                             ),
                             const SizedBox(height: 40),
-                            
-                            // Button Reset
                             SizedBox(
                               width: double.infinity,
                               height: 55,
@@ -160,7 +172,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   elevation: 0,
                                 ),
                                 child: _isLoading
-                                    ? CircularProgressIndicator(color: colorBottom)
+                                    ? CircularProgressIndicator(
+                                      color: colorBottom
+                                      )
                                     : const Text(
                                         "KIRIM LINK RESET",
                                         style: TextStyle(

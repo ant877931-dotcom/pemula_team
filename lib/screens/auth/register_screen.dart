@@ -1,5 +1,3 @@
-// lib/screens/auth/register_screen.dart
-
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 import '../../models/api_response.dart';
@@ -81,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+        gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [colorTop, colorBottom],
@@ -119,23 +117,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.15),
                         borderRadius: BorderRadius.circular(25),
-                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.1)
+                        ),
                       ),
                       child: Column(
                         children: [
                           TextFormField(
                             controller: _emailController,
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(
+                              color: Colors.white
+                              ),
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
                               labelText: 'Email',
-                              labelStyle: const TextStyle(color: Colors.white70),
-                              prefixIcon: Icon(Icons.email_outlined, color: colorAccent),
+                              labelStyle: const TextStyle(
+                                color: Colors.white70
+                                ),
+                              prefixIcon: Icon(
+                                Icons.email_outlined, 
+                                color: colorAccent
+                                ),
                               enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                borderSide: BorderSide(
+                                  color: Colors.white.withOpacity(0.3)
+                                ),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: colorAccent),
+                                borderSide: BorderSide(
+                                  color: colorAccent
+                                ),
                               ),
                             ),
                             validator: (value) {
@@ -152,13 +163,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              labelStyle: const TextStyle(color: Colors.white70),
-                              prefixIcon: Icon(Icons.lock_outline, color: colorAccent),
+                              labelStyle: const TextStyle(
+                                color: Colors.white70
+                                ),
+                              prefixIcon: Icon(
+                                Icons.lock_outline,
+                                 color: colorAccent
+                                 ),
                               enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                borderSide: BorderSide(
+                                  color: Colors.white.withOpacity(0.3)
+                                ),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: colorAccent),
+                                borderSide: BorderSide(
+                                  color: colorAccent
+                                  ),
                               ),
                             ),
                             validator: (value) {
@@ -172,16 +192,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           TextFormField(
                             controller: _rekeningController,
                             keyboardType: TextInputType.number,
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(
+                              color: Colors.white
+                              ),
                             decoration: InputDecoration(
                               labelText: 'Nomor Rekening',
-                              labelStyle: const TextStyle(color: Colors.white70),
-                              prefixIcon: Icon(Icons.account_balance_wallet_outlined, color: colorAccent),
+                              labelStyle: const TextStyle(
+                              color: Colors.white70
+                              ),
+                              prefixIcon: Icon(
+                              Icons.account_balance_wallet_outlined, 
+                              color: colorAccent),
                               enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                borderSide: BorderSide(color: Colors.white.withOpacity(0.3)
+                                ),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: colorAccent),
+                                borderSide: BorderSide(
+                                  color: colorAccent
+                                  ),
                               ),
                             ),
                             validator: (value) {
@@ -206,14 +235,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 elevation: 0,
                               ),
                               child: _isLoading
-                                  ? CircularProgressIndicator(color: colorBottom)
+                                  ? CircularProgressIndicator(
+                                    color: colorBottom
+                                    )
                                   : const Text(
                                       'DAFTAR SEKARANG',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                  ),
+                               ),
                             ),
                           ),
                         ],

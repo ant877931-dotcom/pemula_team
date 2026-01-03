@@ -107,7 +107,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    // Header Logo/
                     Image.asset('assets/images/logo_midBank.png', 
                     height: 80),
                     const SizedBox(height: 10),
@@ -120,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                               fontSize: 32,
                               fontFamily: 'RobotoSlab',
-                              fontWeight: FontWeight.w600, // Bold
+                              fontWeight: FontWeight.w600, 
                               color: Colors.white,
                               letterSpacing: 2,
                             ),
@@ -130,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                               fontSize: 32,
                               fontFamily: 'RobotoSlab',
-                              fontWeight: FontWeight.w700, // Bold
+                              fontWeight: FontWeight.w700, 
                               color: Color(0xFFFDB813),
                               letterSpacing: 2,
                             ),
@@ -153,19 +152,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           TextFormField(
                             controller: _emailController,
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(
+                              color: Colors.white
+                              ),
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
                               labelText: 'Email',
                               labelStyle: const TextStyle(
                                 color: Colors.white70,
                               ),
-                              prefixIcon: Icon(Icons.email, color: colorAccent),
+                              prefixIcon: Icon(
+                                Icons.email, 
+                                color: colorAccent
+                                ),
                               enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white24),
+                                borderSide: BorderSide(
+                                  color: Colors.white24
+                                  ),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: colorAccent),
+                                borderSide: BorderSide(
+                                  color: colorAccent
+                                  ),
                               ),
                             ),
                             validator: (value) {
@@ -179,18 +187,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextFormField(
                             controller: _passwordController,
                             obscureText: true,
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(
+                              color: Colors.white
+                              ),
                             decoration: InputDecoration(
                               labelText: 'Password',
                               labelStyle: const TextStyle(
                                 color: Colors.white70,
                               ),
-                              prefixIcon: Icon(Icons.lock, color: colorAccent),
+                              prefixIcon: Icon(
+                                Icons.lock, 
+                                color: colorAccent
+                                ),
                               enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white24),
+                                borderSide: BorderSide(
+                                  color: Colors.white24
+                                  ),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: colorAccent),
+                                borderSide: BorderSide(
+                                  color: colorAccent
+                                  ),
                               ),
                             ),
                             validator: (value) {
@@ -245,7 +262,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: const Text(
                         'Lupa Password?',
-                        style: TextStyle(color: Colors.white70),
+                        style: TextStyle(
+                          color: Colors.white70
+                        ),
                       ),
                     ),
 

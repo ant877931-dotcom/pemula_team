@@ -109,7 +109,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
         content: Text(
           "Apakah Anda yakin ingin keluar dari sistem manajemen?",
           textAlign: TextAlign.center,
-          style: TextStyle(color: colorBottom.withOpacity(0.8)),
+          style: TextStyle(
+            color: colorBottom.withOpacity(0.8)),
         ),
 
         actionsAlignment: MainAxisAlignment.spaceEvenly,
