@@ -153,7 +153,7 @@ class _AdminAIPageState extends State<AdminAIPage> {
                                           ),
                                           const SizedBox(height: 20),
                                           Text(
-                                            "AI sedang mengumpulkan data...",
+                                            "AI sedang mengumpulkan data",
                                             style: TextStyle(
                                               fontStyle: FontStyle.italic,
                                               color: colorBottom.withOpacity(

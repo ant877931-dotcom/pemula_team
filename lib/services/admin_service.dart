@@ -6,7 +6,7 @@ class AdminService {
   final _supabase = SupabaseConfig().client;
   final _userTable = 'profiles';
 
-  // Admin Manage User: Freeze/Non-aktif sementara (Poin 1.b)
+
   Future<ApiResponse<void>> toggleFreezeUser(
     String userId,
     bool currentStatus,
@@ -29,7 +29,6 @@ class AdminService {
     }
   }
 
-  // Admin Manage User: Banned Akun (Poin 1.b)
   Future<ApiResponse<void>> toggleBanUser(
     String userId,
     bool currentStatus,
@@ -52,7 +51,7 @@ class AdminService {
     }
   }
 
-  // Admin Menentukan No Rekening Whitelist (Poin 1.b)
+
   Future<ApiResponse<void>> addAllowedAccount(String accountNumber) async {
     try {
       await _supabase.from('allowed_accounts').insert({
@@ -65,7 +64,6 @@ class AdminService {
       );
     } on PostgrestException catch (e) {
       if (e.code == '23505') {
-        // Unique violation error
         return ApiResponse(
           success: false,
           message: "Nomor rekening sudah ada di whitelist.",

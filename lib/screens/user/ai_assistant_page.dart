@@ -291,7 +291,7 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
                   controller: _controller,
                   cursorColor: colorTop,
                   decoration: const InputDecoration(
-                    hintText: "Ketik pertanyaan keuangan...",
+                    hintText: "Ketik pertanyaan keuangan",
                     hintStyle: TextStyle(fontSize: 14),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(

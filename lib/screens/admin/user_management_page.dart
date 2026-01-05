@@ -148,7 +148,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: "Cari Email atau No. Rekening...",
+                    hintText: "Cari Email atau No. Rekening",
                     hintStyle: TextStyle(
                       color: Color(0xFF003366),
                       fontSize: 14,

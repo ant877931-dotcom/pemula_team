@@ -147,7 +147,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
       await _supabase.auth.signOut();
       if (mounted) {
         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen()
+            ),
           (route) => false,
         );
       }

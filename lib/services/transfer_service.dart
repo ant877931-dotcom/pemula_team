@@ -5,7 +5,6 @@ import 'midtrans_service.dart';
 class TransferService {
   final _supabase = Supabase.instance.client;
 
-  // --- FITUR TRANSFER SESAMA USER ---
   Future<ApiResponse<void>> transferBalance({
     required String senderId,
     required String targetAccountNumber,
@@ -38,14 +37,11 @@ class TransferService {
       if (senderBalance < amount) {
         return ApiResponse(success: false, message: "Saldo tidak mencukupi.");
       }
-
-      // Update Saldo Pengirim
       await _supabase
           .from('profiles')
           .update({'balance': senderBalance - amount})
           .eq('id', senderId);
 
-      // Update Saldo Penerima
       await _supabase
           .from('profiles')
           .update({
@@ -53,7 +49,6 @@ class TransferService {
           })
           .eq('id', receiverId);
 
-      // Catat History
       await _supabase.from('transactions').insert([
         {
           'user_id': senderId,
@@ -78,8 +73,6 @@ class TransferService {
     }
   }
 
-  // --- FITUR DEPOSIT VIA MIDTRANS ---
-  // Ditambahkan parameter email dan username untuk Midtrans
   Future<ApiResponse<String>> createDepositTransaction({
     required String userId,
     required double amount,
@@ -95,10 +88,8 @@ class TransferService {
         'amount': amount,
         'type': 'deposit',
         'description': 'Deposit via Midtrans ($orderId)',
-        'status': 'pending', // Pastikan kolom ini ada di database
+        'status': 'pending', 
       });
-
-      // 2. Panggil Midtrans dengan NAMED PARAMETERS (Memperbaiki Error Anda)
       final snapToken = await MidtransService().getSnapToken(
         orderId: orderId,
         amount: amount,
@@ -134,19 +125,19 @@ class TransferService {
         return ApiResponse(success: false, message: "Saldo tidak mencukupi.");
       }
 
-      // 1. Kurangi saldo di tabel profiles
+
       await _supabase
           .from('profiles')
           .update({'balance': currentBalance - amount})
           .eq('id', userId);
 
-      // 2. Catat transaksi penarikan
+
       await _supabase.from('transactions').insert({
         'user_id': userId,
         'amount': amount,
         'type': 'withdrawal',
         'status':
-            'pending', // Status pending karena proses bank asli butuh waktu
+            'pending', 
         'description': 'Penarikan Dana ke $bankName',
         'bank_name': bankName,
         'bank_account_number': accountNo,

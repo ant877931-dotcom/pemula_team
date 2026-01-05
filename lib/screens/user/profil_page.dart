@@ -1,5 +1,3 @@
-// lib/screens/user/profil_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/customer_user.dart';
@@ -16,25 +14,24 @@ class _ProfilePageState extends State<ProfilePage> {
   final _supabase = Supabase.instance.client;
   final _pinController = TextEditingController();
 
-
   bool _isAccountVisible = false;
 
-
-  final Color colorTop = const Color(0xFF007AFF);    
-  final Color colorBottom = const Color(0xFF003366); 
-  final Color colorGold = const Color(0xFFFFD700); 
-  final Color colorGoldDark = const Color(0xFFB8860B); 
-
+  final Color colorTop = const Color(0xFF007AFF);
+  final Color colorBottom = const Color(0xFF003366);
+  final Color colorGold = const Color(0xFFFFD700);
+  final Color colorGoldDark = const Color(0xFFB8860B);
 
   String _maskAccountNumber() {
-    return "************"; 
+    return "************";
   }
-
 
   Future<void> _updatePin() async {
     if (_pinController.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("PIN harus 6 digit"), backgroundColor: Colors.orange),
+        const SnackBar(
+          content: Text("PIN harus 6 digit"),
+          backgroundColor: Colors.orange,
+        ),
       );
       return;
     }
@@ -46,10 +43,13 @@ class _ProfilePageState extends State<ProfilePage> {
           .eq('id', widget.user.id);
 
       if (mounted) {
-        Navigator.pop(context); 
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text("PIN berhasil diperbarui!", style: TextStyle(fontWeight: FontWeight.bold)),
+            content: const Text(
+              "PIN berhasil diperbarui!",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             backgroundColor: colorBottom,
           ),
         );
@@ -57,7 +57,10 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Gagal memperbarui PIN"), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text("Gagal memperbarui PIN"),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -72,14 +75,16 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         title: Center(
           child: Text(
-            "Keamanan ", 
-            style: TextStyle(fontWeight: FontWeight.bold, color: colorBottom, )
+            "Keamanan ",
+            style: TextStyle(fontWeight: FontWeight.bold, color: colorBottom),
           ),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text("Ubah PIN Anda secara berkala untuk menjaga keamanan akun."),
+            const Text(
+              "Ubah PIN Anda secara berkala untuk menjaga keamanan akun.",
+            ),
             const SizedBox(height: 20),
             TextField(
               controller: _pinController,
@@ -87,15 +92,23 @@ class _ProfilePageState extends State<ProfilePage> {
               keyboardType: TextInputType.number,
               maxLength: 6,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22, letterSpacing: 8, fontWeight: FontWeight.bold, color: colorBottom),
+              style: TextStyle(
+                fontSize: 22,
+                letterSpacing: 8,
+                fontWeight: FontWeight.bold,
+                color: colorBottom,
+              ),
               decoration: InputDecoration(
                 counterText: "",
                 filled: true,
                 fillColor: colorGold.withOpacity(0.15),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15), 
-                  borderSide: BorderSide(color: colorGoldDark, width: 2)
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(color: colorGoldDark, width: 2),
                 ),
               ),
             ),
@@ -111,10 +124,15 @@ class _ProfilePageState extends State<ProfilePage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: colorGold,
               foregroundColor: colorBottom,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               elevation: 2,
             ),
-            child: const Text("SIMPAN PIN", style: TextStyle(fontWeight: FontWeight.bold)),
+            child: const Text(
+              "SIMPAN PIN",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
@@ -126,16 +144,22 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FA),
       appBar: AppBar(
-        title: Text("PROFILE", style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 2, color: colorGold)),
+        title: Text(
+          "PROFILE",
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2,
+            color: colorGold,
+          ),
+        ),
         centerTitle: true,
-        backgroundColor: colorBottom, 
+        backgroundColor: colorBottom,
         elevation: 0,
         iconTheme: IconThemeData(color: colorGold),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- HEADER GRADIENT ---
             Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.none,
@@ -162,7 +186,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       shape: BoxShape.circle,
                       border: Border.all(color: colorGold, width: 4),
                       boxShadow: [
-                        BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 15, offset: const Offset(0, 8))
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
+                        ),
                       ],
                     ),
                     child: CircleAvatar(
@@ -176,47 +204,54 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 90),
 
-
             Text(
               widget.user.email.toUpperCase(),
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: colorBottom, letterSpacing: 0.5),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w900,
+                color: colorBottom,
+                letterSpacing: 0.5,
+              ),
             ),
             const SizedBox(height: 12),
 
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
-                color: colorBottom, 
+                color: colorBottom,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: colorGold, width: 1.5),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                
                   const SizedBox(width: 8),
                   Text(
-                    "NASABAH", 
-                    style: TextStyle(color: colorGold, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1),
+                    "NASABAH",
+                    style: TextStyle(
+                      color: colorGold,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1,
+                    ),
                   ),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 40),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Column(
                 children: [
-
                   _buildProfileCard(
                     icon: Icons.account_balance_wallet_rounded,
                     title: "NOMOR REKENING",
-                    value: _isAccountVisible 
-                        ? widget.user.accountNumber 
+                    value: _isAccountVisible
+                        ? widget.user.accountNumber
                         : _maskAccountNumber(),
-                    accentColor: colorBottom, 
+                    accentColor: colorBottom,
                     borderGold: false,
                     onTap: () {
                       setState(() {
@@ -224,7 +259,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       });
                     },
                     trailing: Icon(
-                      _isAccountVisible ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                      _isAccountVisible
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
                       color: colorBottom.withOpacity(0.4),
                       size: 20,
                     ),
@@ -234,10 +271,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: Icons.security_rounded,
                     title: "PIN TRANSAKSI",
                     value: "••••••",
-                    accentColor: colorGoldDark, 
+                    accentColor: colorGoldDark,
                     onTap: _showChangePinDialog,
-                    trailing: Icon(Icons.arrow_forward_ios_rounded, color: colorGoldDark, size: 16),
-                    borderGold: true, 
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: colorGoldDark,
+                      size: 16,
+                    ),
+                    borderGold: true,
                   ),
                   const SizedBox(height: 15),
                   _buildProfileCard(
@@ -250,11 +291,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 140),
             Text(
-              "M-BANKING ", 
-              style: TextStyle(color: colorGoldDark.withOpacity(0.6), fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)
+              "M-BANKING ",
+              style: TextStyle(
+                color: colorGoldDark.withOpacity(0.6),
+                fontSize: 10,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 2,
+              ),
             ),
             const SizedBox(height: 30),
           ],
@@ -282,7 +328,11 @@ class _ProfilePageState extends State<ProfilePage> {
           borderRadius: BorderRadius.circular(20),
           border: borderGold ? Border.all(color: colorGold, width: 1.5) : null,
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12, offset: const Offset(0, 4)),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
           ],
         ),
         child: Row(
@@ -301,18 +351,33 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title, 
-                    style: const TextStyle(fontSize: 10, color: Colors.black54, fontWeight: FontWeight.bold, letterSpacing: 1)
+                    title,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    value, 
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: colorBottom, letterSpacing: _isAccountVisible ? 1 : 2)
+                    value,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: colorBottom,
+                      letterSpacing: _isAccountVisible ? 1 : 2,
+                    ),
                   ),
                 ],
               ),
             ),
-            trailing ?? const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.black26),
+            trailing ??
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 14,
+                  color: Colors.black26,
+                ),
           ],
         ),
       ),

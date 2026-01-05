@@ -1,5 +1,3 @@
-// lib/screens/admin/admin_settings_screen.dart
-
 import 'package:flutter/material.dart';
 import '../../models/admin_user.dart';
 import '../../services/auth_service.dart';
@@ -48,9 +46,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
                 ? const SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2
-                      ),
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : Switch(value: _is2faEnabled, onChanged: _toggle2FA),
           ),

@@ -8,7 +8,6 @@ class AdminAIService {
 
   Future<String> getBusinessAnalysis() async {
     try {
-      // 1. Ambil data mentah untuk konteks AI
       final txData = await Supabase.instance.client
           .from('transactions')
           .select();
@@ -16,7 +15,6 @@ class AdminAIService {
           .from('profiles')
           .select('id');
 
-      // 2. Olah ringkasan sederhana agar AI tidak bingung
       double totalIn = 0;
       double totalOut = 0;
       for (var tx in txData) {
@@ -40,7 +38,6 @@ class AdminAIService {
         Tugasmu: Berikan laporan singkat (3-4 poin) mengenai kondisi kesehatan bank dan saran strategi pemasaran atau keamanan.
       """;
 
-      // 3. Panggil LiteLLM
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: {

@@ -16,7 +16,7 @@ class AIService {
         },
         body: jsonEncode({
           "model":
-              "gpt-3.5-turbo", // Sesuaikan dengan model yang aktif di LiteLLM Anda
+              "gpt-3.5-turbo", 
           "messages": [
             {"role": "system", "content": systemContext},
             {"role": "user", "content": prompt},

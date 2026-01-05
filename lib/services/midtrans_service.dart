@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class MidtransService {
-  // Ganti dengan Server Key dari Dashboard Midtrans Sandbox Anda
   final String serverKey = "SB-Mid-server-EglgwV4vUg8Pt4H_w5XhxXva";
 
   Future<String?> getSnapToken({

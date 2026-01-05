@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
 
-// Extension untuk format double ke Rupiah (Rp)
 extension FormatExtensions on double {
   String toIDR() {
     final formatter = NumberFormat.currency(

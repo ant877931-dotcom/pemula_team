@@ -36,7 +36,10 @@ class _MidtransPaymentPageState extends State<MidtransPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Pembayaran Top Up")),
+      appBar: AppBar(title: const Text(
+        "Pembayaran Top Up",
+        )
+        ),
       body: WebViewWidget(controller: _controller),
     );
   }

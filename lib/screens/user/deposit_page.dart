@@ -18,7 +18,6 @@ class _DepositPageState extends State<DepositPage> {
   final _transferService = TransferService();
   bool _isLoading = false;
 
-
   final Color colorTop = const Color(0xFF007AFF);
   final Color colorBottom = const Color(0xFF003366);
   final Color colorGold = const Color(0xFFFFD700);

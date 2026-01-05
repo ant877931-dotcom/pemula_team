@@ -31,9 +31,9 @@ class _UserDashboardState extends State<UserDashboard> {
 
   bool _isAccountVisible = false;
 
-  final Color colorTop = const Color(0xFF007AFF);    
-  final Color colorBottom = const Color(0xFF003366); 
-  final Color colorGold = const Color(0xFFFFD700);   
+  final Color colorTop = const Color(0xFF007AFF);
+  final Color colorBottom = const Color(0xFF003366);
+  final Color colorGold = const Color(0xFFFFD700);
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _UserDashboardState extends State<UserDashboard> {
   }
 
   String _maskAccountNumber() {
-    return "********"; 
+    return "********";
   }
 
   void _listenToNewTransactions() {
@@ -72,7 +72,7 @@ class _UserDashboardState extends State<UserDashboard> {
 
             if (type == 'deposit' || type == 'transfer_in') {
               NotificationService.showNotification(
-                title: "Uang Masuk! 💰",
+                title: "Uang Masuk!",
                 body: "Berhasil menerima saldo sebesar ${amount.toIDR()}",
               );
               _fetchProfile();
@@ -83,63 +83,51 @@ class _UserDashboardState extends State<UserDashboard> {
   }
 
   Future<void> _handleLogout() async {
-   final bool? confirm = await showDialog(
-  context: context,
-  builder: (context) => AlertDialog(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    title: Column(
-      children: [
-        Icon(
-          Icons.logout_rounded, 
-          size: 50, 
-          color: colorGold, 
+    final bool? confirm = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Column(
+          children: [
+            Icon(Icons.logout_rounded, size: 50, color: colorGold),
+            const SizedBox(height: 12),
+            Text(
+              "Konfirmasi Logout",
+              style: TextStyle(fontWeight: FontWeight.bold, color: colorBottom),
+            ),
+          ],
         ),
-        const SizedBox(height: 12),
-        Text(
-          "Konfirmasi Logout",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: colorBottom, 
-          ),
-        ),
-      ],
-    ),
-    
-    content: Text(
-      "Apakah Anda yakin ingin keluar?",
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        color: colorBottom.withOpacity(0.8)
-        ), 
-    ),
-    
-    actionsAlignment: MainAxisAlignment.spaceEvenly,
-    actionsPadding: const EdgeInsets.only(bottom: 16),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.pop(context, false),
-        child: Text(
-          "Batal",
-          style: TextStyle(
-            color: colorBottom, 
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-      ),
 
-      TextButton(
-        onPressed: () => Navigator.pop(context, true),
-        child: Text(
-          "Keluar",
-          style: TextStyle(
-            color: colorTop,
-            fontWeight: FontWeight.bold,
-          ),
+        content: Text(
+          "Apakah Anda yakin ingin keluar?",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: colorBottom.withOpacity(0.8)),
         ),
+
+        actionsAlignment: MainAxisAlignment.spaceEvenly,
+        actionsPadding: const EdgeInsets.only(bottom: 16),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(
+              "Batal",
+              style: TextStyle(
+                color: colorBottom,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(
+              "Keluar",
+              style: TextStyle(color: colorTop, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
-    ],
-  ),
-);
+    );
     if (confirm == true) {
       try {
         await Supabase.instance.client.auth.signOut();
@@ -150,15 +138,21 @@ class _UserDashboardState extends State<UserDashboard> {
           );
         }
       } catch (e) {
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error: $e")));
+        if (mounted)
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("Error: $e")));
       }
     }
   }
 
   Future<void> _fetchProfile() async {
     try {
-      final data = await Supabase.instance.client.from('profiles').select().eq('id', widget.userId).single();
+      final data = await Supabase.instance.client
+          .from('profiles')
+          .select()
+          .eq('id', widget.userId)
+          .single();
       setState(() {
         _currentUser = CustomerUser(
           id: data['id'],
@@ -175,7 +169,9 @@ class _UserDashboardState extends State<UserDashboard> {
 
   void _navigateTo(Widget page) async {
     final result = await Navigator.push(
-      context, MaterialPageRoute(builder: (_) => page));
+      context,
+      MaterialPageRoute(builder: (_) => page),
+    );
     if (result == true) _fetchProfile();
   }
 
@@ -200,7 +196,7 @@ class _UserDashboardState extends State<UserDashboard> {
               ),
             ),
           ),
-          
+
           SafeArea(
             child: RefreshIndicator(
               onRefresh: _fetchProfile,
@@ -209,7 +205,7 @@ class _UserDashboardState extends State<UserDashboard> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     const SizedBox(height: 10),
                     _buildCustomAppBar(),
                     const SizedBox(height: 20),
@@ -221,7 +217,11 @@ class _UserDashboardState extends State<UserDashboard> {
                     const SizedBox(height: 35),
                     const Text(
                       "Aktivitas Terakhir",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF333333)),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF333333),
+                      ),
                     ),
                     const SizedBox(height: 15),
                     _buildTransactionHistory(),
@@ -242,12 +242,21 @@ class _UserDashboardState extends State<UserDashboard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Welcome to,",
-          style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w400),
+          "Welcome to",
+          style: TextStyle(
+            color: Colors.white70,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
         ),
         Text(
           userName.toUpperCase(),
-          style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: 1.1),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.1,
+          ),
         ),
       ],
     );
@@ -265,7 +274,10 @@ class _UserDashboardState extends State<UserDashboard> {
               backgroundColor: colorGold,
               child: Icon(Icons.person, size: 40, color: colorBottom),
             ),
-            accountName: const Text("User Account", style: TextStyle(fontWeight: FontWeight.bold)),
+            accountName: const Text(
+              "User Account",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             accountEmail: Text(_currentUser.email),
           ),
           ListTile(
@@ -289,7 +301,13 @@ class _UserDashboardState extends State<UserDashboard> {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Color(0xFF003366)),
-            title: const Text("Logout", style: TextStyle(color: Color(0xFF003366), fontWeight: FontWeight.bold)),
+            title: const Text(
+              "Logout",
+              style: TextStyle(
+                color: Color(0xFF003366),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             onTap: () {
               Navigator.pop(context);
               _handleLogout();
@@ -310,7 +328,7 @@ class _UserDashboardState extends State<UserDashboard> {
             icon: Icon(Icons.menu_open_rounded, color: colorGold, size: 32),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
-          const SizedBox(width: 48), 
+          const SizedBox(width: 48),
         ],
       ),
     );
@@ -323,9 +341,13 @@ class _UserDashboardState extends State<UserDashboard> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: colorGold.withOpacity(0.3), width: 1.5), 
+        border: Border.all(color: colorGold.withOpacity(0.3), width: 1.5),
         boxShadow: [
-          BoxShadow(color: colorBottom.withOpacity(0.15), blurRadius: 20, offset: const Offset(0, 10)),
+          BoxShadow(
+            color: colorBottom.withOpacity(0.15),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
         ],
       ),
       child: Column(
@@ -334,14 +356,25 @@ class _UserDashboardState extends State<UserDashboard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Saldo Tersedia", style: TextStyle(color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w600)),
+              const Text(
+                "Saldo Tersedia",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               Icon(Icons.shield_rounded, color: colorGold, size: 22),
             ],
           ),
           const SizedBox(height: 10),
           Text(
             _currentUser.balance.toIDR(),
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: colorBottom),
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: colorBottom,
+            ),
           ),
           const SizedBox(height: 20),
           GestureDetector(
@@ -357,11 +390,18 @@ class _UserDashboardState extends State<UserDashboard> {
                 children: [
                   Text(
                     "No. Rekening: ${_isAccountVisible ? _currentUser.accountNumber : _maskAccountNumber()}",
-                    style: TextStyle(color: colorBottom, fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 1),
+                    style: TextStyle(
+                      color: colorBottom,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      letterSpacing: 1,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Icon(
-                    _isAccountVisible ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                    _isAccountVisible
+                        ? Icons.visibility_off_rounded
+                        : Icons.visibility_rounded,
                     size: 18,
                     color: colorTop,
                   ),
@@ -380,14 +420,28 @@ class _UserDashboardState extends State<UserDashboard> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _menuItem(Icons.add_circle_rounded, "TopUp", () => _navigateTo(DepositPage(user: _currentUser))),
-          _menuItem(Icons.account_balance_wallet_rounded, "Tarik", () => _navigateTo(WithdrawalPage(user: _currentUser))),
-          _menuItem(Icons.send_rounded, "Transfer", () => _navigateTo(TransferPage(user: _currentUser))),
+          _menuItem(
+            Icons.add_circle_rounded,
+            "TopUp",
+            () => _navigateTo(DepositPage(user: _currentUser)),
+          ),
+          _menuItem(
+            Icons.account_balance_wallet_rounded,
+            "Tarik",
+            () => _navigateTo(WithdrawalPage(user: _currentUser)),
+          ),
+          _menuItem(
+            Icons.send_rounded,
+            "Transfer",
+            () => _navigateTo(TransferPage(user: _currentUser)),
+          ),
           // MENU UPDATE YANG DISESUAIKAN
           _menuItem(Icons.cached_rounded, "Update", () {
             _fetchProfile();
@@ -411,20 +465,28 @@ class _UserDashboardState extends State<UserDashboard> {
       child: Column(
         children: [
           Container(
-            height: 55, width: 55,
+            height: 55,
+            width: 55,
             decoration: BoxDecoration(
               color: colorBottom.withOpacity(0.08),
               shape: BoxShape.circle,
               border: Border.all(color: colorGold.withOpacity(0.2), width: 1),
             ),
             child: Icon(
-              icon, 
-              color: (label == "Histori") ? colorGold : colorTop, 
-              size: 28
-            ), 
+              icon,
+              color: (label == "Histori") ? colorGold : colorTop,
+              size: 28,
+            ),
           ),
           const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87)),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
         ],
       ),
     );
@@ -435,30 +497,30 @@ class _UserDashboardState extends State<UserDashboard> {
       future: _transactionService.getTransactionHistory(_currentUser.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: CircularProgressIndicator(),
-          ));
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: CircularProgressIndicator(),
+            ),
+          );
         }
         final history = snapshot.data?.data ?? [];
-        if (history.isEmpty) return const Center(
-          child: Text(
-            "Tidak ada aktivitas transaksi.",
-            )
-            );
+        if (history.isEmpty)
+          return const Center(child: Text("Tidak ada aktivitas transaksi."));
 
         return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: history.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 12), 
+          separatorBuilder: (_, __) => const SizedBox(height: 12),
           itemBuilder: (context, index) {
             final tx = history[index];
-            final bool isCredit = tx.type == 'deposit' || tx.type == 'transfer_in';
-            
+            final bool isCredit =
+                tx.type == 'deposit' || tx.type == 'transfer_in';
+
             String title = "TRANSAKSI";
             IconData iconData = Icons.swap_horiz_rounded;
-            
+
             switch (tx.type) {
               case 'deposit':
                 title = "TOP UP SALDO";
@@ -466,7 +528,7 @@ class _UserDashboardState extends State<UserDashboard> {
                 break;
               case 'withdrawal':
                 title = "TARIK TUNAI";
-                iconData = Icons.outbox_rounded; 
+                iconData = Icons.outbox_rounded;
                 break;
               case 'transfer_in':
                 title = "TERIMA TRANSFER";
@@ -479,50 +541,56 @@ class _UserDashboardState extends State<UserDashboard> {
             }
 
             return Container(
-              padding: const EdgeInsets.symmetric(vertical: 8), 
+              padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.white, 
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-          
+
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05), 
-                    blurRadius: 10, 
-                    offset: const Offset(0, 4)
-                  )
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
                 ],
-
               ),
               child: ListTile(
                 leading: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-   
-                    color: isCredit ? const Color(0xFFE8F5E9) : const Color(0xFFFFEBEE),
+                    color: isCredit
+                        ? const Color(0xFFE8F5E9)
+                        : const Color(0xFFFFEBEE),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    iconData, 
-           
-                    color: isCredit ? const Color(0xFF2E7D32) : const Color(0xFFC62828), 
-                    size: 24
+                    iconData,
+
+                    color: isCredit
+                        ? const Color(0xFF2E7D32)
+                        : const Color(0xFFC62828),
+                    size: 24,
                   ),
                 ),
                 title: Text(
-                  title, 
+                  title,
                   style: TextStyle(
-                    fontWeight: FontWeight.w900, 
-                    fontSize: 13, 
-                    color: colorBottom, 
-                    letterSpacing: 0.5
-                  )
+                    fontWeight: FontWeight.w900,
+                    fontSize: 13,
+                    color: colorBottom,
+                    letterSpacing: 0.5,
+                  ),
                 ),
 
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Text(
-                    tx.description ?? "-", 
-                    style: TextStyle(fontSize: 11, color: Colors.grey[600], fontWeight: FontWeight.w500),
+                    tx.description ?? "-",
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -532,9 +600,11 @@ class _UserDashboardState extends State<UserDashboard> {
                   "${isCredit ? '+' : '-'}${tx.amount.toIDR()}",
                   style: TextStyle(
                     // Warna nominal hijau/merah yang lebih "matang"
-                    color: isCredit ? const Color(0xFF2E7D32) : const Color(0xFFC62828), 
-                    fontWeight: FontWeight.w900, 
-                    fontSize: 14
+                    color: isCredit
+                        ? const Color(0xFF2E7D32)
+                        : const Color(0xFFC62828),
+                    fontWeight: FontWeight.w900,
+                    fontSize: 14,
                   ),
                 ),
               ),

@@ -8,7 +8,6 @@ import '../config/supabase_config.dart';
 class AuthService {
   final _supabase = SupabaseConfig().client;
 
-  // 1. LOGIN METHOD (Updated with Status & PIN Check)
   Future<ApiResponse<AppUser>> login(String email, String password) async {
     try {
       final AuthResponse response = await _supabase.auth.signInWithPassword(
@@ -16,27 +15,22 @@ class AuthService {
         password: password,
       );
 
-      // Ambil data profile lengkap termasuk status is_frozen, is_banned, dan PIN
       final profile = await _supabase
           .from('profiles')
           .select()
           .eq('id', response.user!.id)
           .single();
 
-      // --- VALIDASI STATUS AKUN ---
-
-      // 1. Cek apakah akun di-ban
       if (profile['is_banned'] == true) {
-        await _supabase.auth.signOut(); // Paksa hapus session
+        await _supabase.auth.signOut();
         return ApiResponse(
           success: false,
           message: "Akun Anda telah di-banned secara permanen. Hubungi admin.",
         );
       }
 
-      // 2. Cek apakah akun dibekukan (frozen)
       if (profile['is_frozen'] == true) {
-        await _supabase.auth.signOut(); // Paksa hapus session
+        await _supabase.auth.signOut();
         return ApiResponse(
           success: false,
           message:
@@ -44,21 +38,17 @@ class AuthService {
         );
       }
 
-      // --------------------------------------------
-
       late AppUser user;
 
-      // Conditional instantiation berdasarkan role (Polymorphism)
       if (profile['role'] == 'admin') {
         user = AdminUser(id: profile['id'], email: email);
       } else {
-        // [UPDATE] Sekarang menyertakan PIN ke dalam objek CustomerUser
         user = CustomerUser(
           id: profile['id'],
           email: email,
           accountNumber: profile['account_number'] ?? '-',
           balance: (profile['balance'] ?? 0).toDouble(),
-          pin: profile['pin'], // Menambahkan PIN dari database
+          pin: profile['pin'],
         );
       }
 
@@ -73,7 +63,6 @@ class AuthService {
     }
   }
 
-  // 2. REGISTER METHOD
   Future<ApiResponse<void>> register(
     String email,
     String password,
@@ -91,8 +80,6 @@ class AuthService {
 
       final user = authResponse.user!;
 
-      // Insert data ke tabel profiles
-      // [UPDATE] Menambahkan kolom pin dengan nilai default saat pendaftaran
       await _supabase.from('profiles').insert({
         'id': user.id,
         'email': email,
@@ -101,7 +88,7 @@ class AuthService {
         'role': 'customer',
         'is_frozen': false,
         'is_banned': false,
-        'pin': '123456', // PIN default untuk user baru
+        'pin': '123456',
       });
 
       await _supabase.auth.signOut();
@@ -121,7 +108,6 @@ class AuthService {
     }
   }
 
-  // 3. SEND MAGIC LINK/OTP METHOD
   Future<ApiResponse<String>> sendMagicLink(String email) async {
     try {
       await _supabase.auth.signInWithOtp(email: email, shouldCreateUser: false);
@@ -142,7 +128,6 @@ class AuthService {
     }
   }
 
-  // 4. LOGOUT
   Future<void> signOut() async {
     await _supabase.auth.signOut();
   }
