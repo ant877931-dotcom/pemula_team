@@ -101,7 +101,8 @@ class _UserDashboardState extends State<UserDashboard> {
         content: Text(
           "Apakah Anda yakin ingin keluar?",
           textAlign: TextAlign.center,
-          style: TextStyle(color: colorBottom.withOpacity(0.8)),
+          style: TextStyle(
+            color: colorBottom.withOpacity(0.8)),
         ),
 
         actionsAlignment: MainAxisAlignment.spaceEvenly,
@@ -442,7 +443,6 @@ class _UserDashboardState extends State<UserDashboard> {
             "Transfer",
             () => _navigateTo(TransferPage(user: _currentUser)),
           ),
-          // MENU UPDATE YANG DISESUAIKAN
           _menuItem(Icons.cached_rounded, "Update", () {
             _fetchProfile();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -599,7 +599,6 @@ class _UserDashboardState extends State<UserDashboard> {
                 trailing: Text(
                   "${isCredit ? '+' : '-'}${tx.amount.toIDR()}",
                   style: TextStyle(
-                    // Warna nominal hijau/merah yang lebih "matang"
                     color: isCredit
                         ? const Color(0xFF2E7D32)
                         : const Color(0xFFC62828),

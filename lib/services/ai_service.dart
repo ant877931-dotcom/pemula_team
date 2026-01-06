@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AIService {
-  // Data dari input Anda
   final String apiKey = "sk-qz1-zMuj5405dY1rB2ao-w";
   final String baseUrl = "https://litellm.koboi2026.biz.id/v1/chat/completions";
 

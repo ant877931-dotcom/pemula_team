@@ -174,7 +174,6 @@ class _DepositPageState extends State<DepositPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header Info Saldo
             Container(
               padding: const EdgeInsets.all(25),
               decoration: BoxDecoration(
@@ -228,8 +227,6 @@ class _DepositPageState extends State<DepositPage> {
                     ),
                   ),
                   const SizedBox(height: 15),
-
-                  // Input Area Premium
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -289,8 +286,6 @@ class _DepositPageState extends State<DepositPage> {
                   ),
 
                   const SizedBox(height: 40),
-
-                  // Tombol Konfirmasi
                   Container(
                     width: double.infinity,
                     height: 55,

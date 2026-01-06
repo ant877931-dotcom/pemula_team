@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
               result.message ??
                   (result.success ? "Login berhasil!" : "Login gagal."),
             ),
-            backgroundColor: result.success ? colorBottom : Colors.white,
+            backgroundColor: result.success ? colorBottom : const Color(0xFF002D57),
           ),
         );
 
@@ -218,8 +218,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                           const SizedBox(height: 40),
-
-                          // Tombol Login
                           SizedBox(
                             width: double.infinity,
                             height: 55,
