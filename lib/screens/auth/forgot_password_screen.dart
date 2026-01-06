@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'login_screen.dart'; 
+import 'login_screen.dart'; // Pastikan import ini ada untuk redirect setelah sukses
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -17,12 +17,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _supabase = Supabase.instance.client;
 
   bool _isLoading = false;
-  bool _isTokenSent = false; 
+  bool _isTokenSent = false; // State untuk mengecek apakah token sudah dikirim
 
-
+  // --- PALET WARNA (Sesuai Login Screen) ---
   final Color colorTop = const Color(0xFF007AFF);
   final Color colorBottom = const Color(0xFF003366);
-  final Color colorAccent = const Color(0xFFFDB813); 
+  final Color colorAccent = const Color(0xFFFDB813); // Kuning Aksen
 
   @override
   void dispose() {
@@ -32,7 +32,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     super.dispose();
   }
 
-
+  // 1. KIRIM KODE OTP KE EMAIL
   Future<void> _sendOtp() async {
     final email = _emailController.text.trim();
     if (email.isEmpty) {
@@ -43,14 +43,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() => _isLoading = true);
 
     try {
-
+      // Menggunakan signInWithOtp agar user mendapat kode 6 digit
       await _supabase.auth.signInWithOtp(
         email: email,
-        shouldCreateUser: false,
+        shouldCreateUser: false, // Penting: Hanya untuk user yang sudah ada
       );
 
       setState(() {
-        _isTokenSent = true; 
+        _isTokenSent = true; // Ubah tampilan ke input token
         _isLoading = false;
       });
 
@@ -61,7 +61,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
   }
 
-
+  // 2. VERIFIKASI TOKEN
   Future<void> _verifyOtpAndShowPasswordDialog() async {
     final token = _tokenController.text.trim();
     final email = _emailController.text.trim();
@@ -74,7 +74,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() => _isLoading = true);
 
     try {
-
+      // Verifikasi token. Jika berhasil, user akan otomatis LOGIN (mendapat session)
       final AuthResponse res = await _supabase.auth.verifyOTP(
         type: OtpType.email,
         token: token,
@@ -84,7 +84,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       setState(() => _isLoading = false);
 
       if (res.session != null) {
-
+        // Jika verifikasi sukses & dapat sesi, tampilkan Popup Ganti Password
         if (mounted) _showChangePasswordDialog();
       }
     } catch (e) {
@@ -93,11 +93,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
   }
 
-
+  // 3. POPUP GANTI PASSWORD & UPDATE KE DATABASE
   void _showChangePasswordDialog() {
     showDialog(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false, // User tidak bisa tap di luar untuk tutup
       builder: (context) {
         bool isUpdating = false;
 
@@ -161,14 +161,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       setStateDialog(() => isUpdating = true);
 
                       try {
+                        // Update password user yang sedang login saat ini
                         await _supabase.auth.updateUser(
                           UserAttributes(password: _newPasswordController.text),
                         );
 
+                        // Logout agar user login ulang dengan password baru
                         await _supabase.auth.signOut();
 
                         if (mounted) {
-                          Navigator.pop(context); 
+                          Navigator.pop(context); // Tutup Dialog
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
@@ -227,6 +229,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         child: SafeArea(
           child: Stack(
             children: [
+              // Tombol Back
               Positioned(
                 top: 10,
                 left: 10,
@@ -322,6 +325,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 ),
                               )
                             else
+                              // Input Token
                               TextFormField(
                                 controller: _tokenController,
                                 style: const TextStyle(
@@ -389,6 +393,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           ],
                         ),
                       ),
+
+                      // Tombol Ganti Email (Jika salah ketik)
                       if (_isTokenSent)
                         TextButton(
                           onPressed: () {
